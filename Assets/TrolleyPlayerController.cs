@@ -39,7 +39,10 @@ public class TrolleyPlayerController : MonoBehaviour
         InitialForward = transform.forward;
         Initialright = Vector3.Cross(Vector3.up, InitialForward);
         parentTransform = transform.parent;
+        downTime[0] = -1f;
+        downTime[1] = -1f;
     }
+
 
     // Update is called once per frame
     void Update()
@@ -81,9 +84,29 @@ public class TrolleyPlayerController : MonoBehaviour
 
     }
 
+    
+
     void UpdateRailed()
     {
 
+        ReadInputsRailed();
+        
+
+        if (angle > 0)
+        {
+            transform.forward = Vector3.Slerp(InitialForward, Initialright, angle / 90f);
+        }
+        else
+        {
+            transform.forward = Vector3.Slerp(InitialForward, -Initialright, angle / -90f);
+        }
+
+        parentTransform.position += speed * InitialForward;
+    }
+
+
+    private void ReadInputsRailed()
+    {
         if (Input.GetKey("up"))
         {
             if (speed < maxSpeed)
@@ -133,17 +156,52 @@ public class TrolleyPlayerController : MonoBehaviour
             angle = 0f;
         }
 
-        if (angle > 0)
+
+        checkSwitchTracks(Input.GetKeyDown("left"), ref downTime[0]);
+        checkSwitchTracks(Input.GetKeyDown("right"), ref downTime[1]);
+    }
+
+
+    private bool checkSwitchTracks(bool keyDown, ref float downTime)
+    {
+        if (keyDown)
         {
-            transform.forward = Vector3.Slerp(InitialForward, Initialright, angle / 90f);
+            if (downTime > 0)
+            {
+                float deltaTime = Time.time - downTime;
+                if (deltaTime < doublePressTime)
+                {
+                    switchTracks(true);
+                }
+                else
+                {
+                    downTime = Time.time;
+                }
+
+            }
+            else
+            {
+                downTime = Time.time;
+            }
+        }
+        return false;
+    }
+
+
+    private readonly float[] downTime = new float[2];
+    private float doublePressTime = 0.75f;
+
+    private void switchTracks(bool right)
+    {
+        if (right)
+        {
+            print("you are trying to switch tracks right ");
         }
         else
         {
-            transform.forward = Vector3.Slerp(InitialForward, -Initialright, angle / -90f);
+
+            print("you are trying to switch tracks");
         }
-
-        parentTransform.position += speed * InitialForward;
     }
-
 
 }
