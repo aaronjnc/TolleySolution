@@ -37,6 +37,11 @@ public class TrolleyPlayerController : MonoBehaviour
     private Quaternion railedCameraRotation;
     private Vector3 railedCameraPosition;
 
+    public void SetMovementState(TrolleyMovementState state)
+    {
+        CurrentMovementState = state;
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -133,33 +138,15 @@ public class TrolleyPlayerController : MonoBehaviour
 
         if (Input.GetKey("right"))
         {
-            if (angle < maxAngle)
-            {
-                angle += angleSpeed;
-            }
-            else if (Input.GetKeyDown("space"))
-            {
-                // enterDerailment
-                CurrentMovementState = TrolleyMovementState.Derailed;
-                derailedVector = (angle > 0f) ? Initialright : -Initialright;
-            }
+            parentTransform.Rotate(0f, 1f, 0f);
 
         }
         else if (Input.GetKey("left"))
         {
-            if (angle > minAngle)
-            {
-                angle -= angleSpeed;
-            }
-            else if (Input.GetKeyDown("space"))
-            {
-                // enterDerailment
-                CurrentMovementState = TrolleyMovementState.Derailed;
-                derailedVector = (angle > 0f) ? Initialright : -Initialright;
-            }
+            parentTransform.Rotate(0f, -1f, 0f);
         }
 
-        parentRigibody.velocity = speed * parentTransform.forward;
+        parentRigibody.velocity = (speed*10) * parentTransform.forward;
 
     }
     
