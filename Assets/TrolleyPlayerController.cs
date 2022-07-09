@@ -171,7 +171,7 @@ public class TrolleyPlayerController : MonoBehaviour
                 float deltaTime = Time.time - downTime;
                 if (deltaTime < doublePressTime)
                 {
-                    switchTracks();
+                    switchTracks(true);
                 }
                 else
                 {
@@ -195,9 +195,13 @@ public class TrolleyPlayerController : MonoBehaviour
     {
         if (right)
         {
-
+            print("you are trying to switch tracks right ");
         }
-        print("you are trying to switch tracks");
+        else
+        {
+
+            print("you are trying to switch tracks");
+        }
     }
 
 }
