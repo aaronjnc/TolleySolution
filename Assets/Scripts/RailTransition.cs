@@ -7,6 +7,21 @@ public class RailTransition : MonoBehaviour
     [SerializeField]
     private bool railStart;
 
+    [SerializeField]
+    private Rail rail;
+
+    void Start()
+    {
+
+        rail = transform.parent.GetComponent<Rail>();
+
+
+    }
+
+
+    
+
+
     private void OnTriggerEnter(Collider other)
     {
         TrolleyPlayerController tp = other.GetComponent<TrolleyPlayerController>();
@@ -14,6 +29,7 @@ public class RailTransition : MonoBehaviour
         {
             if (railStart)
             {
+                ///tp.setCamera(rail);
                 tp.SetInitialForward(transform.forward);
                 tp.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Railed);
             }

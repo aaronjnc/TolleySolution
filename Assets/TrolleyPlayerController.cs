@@ -39,12 +39,17 @@ public class TrolleyPlayerController : MonoBehaviour
     private Quaternion railedCameraRotation;
     private Vector3 railedCameraPosition;
 
+    public void ResetRotation()
+    {
+        transform.localEulerAngles = Vector3.zero;
+    }
+
     public void SetMovementState(TrolleyMovementState state)
     {
         CurrentMovementState = state;
         if (CurrentMovementState == TrolleyMovementState.Free)
         {
-            Camera.main.transform.SetParent(transform);
+            //Camera.main.transform.SetParent(transform);
         }
         else if (CurrentMovementState == TrolleyMovementState.Railed)
         {
@@ -133,6 +138,7 @@ public class TrolleyPlayerController : MonoBehaviour
         // move camera
         mainCamera.transform.position = cameraFree.transform.position;
         mainCamera.transform.forward = cameraFree.transform.forward;
+        ResetRotation();
 
         if (Input.GetKey("j"))
         {
@@ -197,15 +203,21 @@ public class TrolleyPlayerController : MonoBehaviour
         mainCamera.transform.localRotation = railedCameraRotation;
 
         ReadInputsRailed();
-        
 
-        if (angle > 0)
+        if (CurrentMovementState == TrolleyMovementState.Free)
         {
-            transform.forward = Vector3.Slerp(RailInitialForward, RailInitialRight, angle / 90f);
+            transform.forward = RailInitialForward;
         }
         else
-        {
-            transform.forward = Vector3.Slerp(RailInitialForward, -RailInitialRight, angle / -90f);
+        { 
+            if (angle > 0)
+            {
+                transform.forward = Vector3.Slerp(RailInitialForward, RailInitialRight, angle / 90f);
+            }
+            else
+            {
+                transform.forward = Vector3.Slerp(RailInitialForward, -RailInitialRight, angle / -90f);
+            }
         }
 
         parentTransform.position += speed * RailInitialForward;
