@@ -31,6 +31,10 @@ public class TrolleyPlayerController : MonoBehaviour
     Vector3 InitialForward;
     Vector3 Initialright;
     Transform parentTransform = null;
+    [SerializeField] private Camera mainCamera = null;
+    [SerializeField] private GameObject cameraFree = null;
+    private Quaternion railedCameraRotation;
+    private Vector3 railedCameraPosition;
 
 
     // Start is called before the first frame update
@@ -41,6 +45,9 @@ public class TrolleyPlayerController : MonoBehaviour
         parentTransform = transform.parent;
         downTime[0] = -1f;
         downTime[1] = -1f;
+        railedCameraRotation = mainCamera.transform.localRotation;
+        railedCameraPosition = mainCamera.transform.localPosition;
+
     }
 
 
@@ -57,12 +64,20 @@ public class TrolleyPlayerController : MonoBehaviour
             case TrolleyMovementState.Derailed:
                 UpdateDerailed();
                 break;
+            case TrolleyMovementState.Free:
+                UpdateFree();
+                break;
         }
     }
 
 
     Vector3 derailedVector;
     float derailedDeceleration = 0.003f;
+
+
+
+
+
 
     void UpdateDerailed()
     {
@@ -84,10 +99,25 @@ public class TrolleyPlayerController : MonoBehaviour
 
     }
 
+
+    void UpdateFree()
+    {
+        // move camera
+        mainCamera.transform.position = cameraFree.transform.position;
+        mainCamera.transform.forward = cameraFree.transform.forward;
+
+        if (Input.GetKey("j"))
+        {
+            CurrentMovementState = TrolleyMovementState.Railed;
+        }
+    }
     
 
     void UpdateRailed()
     {
+
+        mainCamera.transform.localPosition = railedCameraPosition;
+        mainCamera.transform.localRotation = railedCameraRotation;
 
         ReadInputsRailed();
         
@@ -157,12 +187,18 @@ public class TrolleyPlayerController : MonoBehaviour
         }
 
 
-        checkSwitchTracks(Input.GetKeyDown("left"), ref downTime[0]);
-        checkSwitchTracks(Input.GetKeyDown("right"), ref downTime[1]);
+        if (Input.GetKey("f"))
+        {
+            CurrentMovementState = TrolleyMovementState.Free;
+        }
+
+
+        checkSwitchTracks(Input.GetKeyDown("left"), ref downTime[0], false);
+        checkSwitchTracks(Input.GetKeyDown("right"), ref downTime[1], true);
     }
 
 
-    private bool checkSwitchTracks(bool keyDown, ref float downTime)
+    private bool checkSwitchTracks(bool keyDown, ref float downTime, bool isRight)
     {
         if (keyDown)
         {
@@ -171,13 +207,12 @@ public class TrolleyPlayerController : MonoBehaviour
                 float deltaTime = Time.time - downTime;
                 if (deltaTime < doublePressTime)
                 {
-                    switchTracks(true);
+                    switchTracks(isRight);
                 }
                 else
                 {
                     downTime = Time.time;
                 }
-
             }
             else
             {
@@ -195,12 +230,12 @@ public class TrolleyPlayerController : MonoBehaviour
     {
         if (right)
         {
-            print("you are trying to switch tracks right ");
+            //print("you are trying to switch tracks right ");
+            transform.position = new Vector3(transform.position.x + 10f, transform.position.y, transform.position.z);
         }
         else
         {
-
-            print("you are trying to switch tracks");
+            transform.position = new Vector3(transform.position.x - 10f, transform.position.y, transform.position.z);
         }
     }
 
