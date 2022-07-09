@@ -16,18 +16,23 @@ public class SpawnPoint : MonoBehaviour
     {
         person.GetComponent<PersonInfo>().Kill();
         occupied = false;
-        choice.WaitToSpawn();
+        choice.DisablePeople();
+    }
+
+    public void DisablePerson()
+    {
+        if (!occupied) return;
+        person.GetComponent<PersonInfo>().Kill();
+        occupied = false;
     }
 
     public void FillSpace(GameObject person)
     {
         if (occupied)
         {
-            person.GetComponent<PersonInfo>().Kill();
-            occupied = false;
+            DisablePerson();
         }
-        this.person = person;
-        person.GetComponent<PersonInfo>().SetLocation(this);
+        this.person = person.GetComponent<PersonInfo>().SetLocation(this);
         occupied = true;
     }
 }
