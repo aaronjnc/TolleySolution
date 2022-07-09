@@ -28,8 +28,8 @@ public class TrolleyPlayerController : MonoBehaviour
     float maxAngle = 25f;
     float minAngle = -25f;
 
-    Vector3 InitialForward;
-    Vector3 Initialright;
+    Vector3 RailInitialForward;
+    Vector3 RailInitialRight;
     Transform parentTransform = null;
     Rigidbody parentRigibody = null;
     [SerializeField] private Camera mainCamera = null;
@@ -42,12 +42,16 @@ public class TrolleyPlayerController : MonoBehaviour
         CurrentMovementState = state;
     }
 
+    public void SetInitialForward(Vector3 forward)
+    {
+        RailInitialForward = forward;
+        RailInitialRight = Vector3.Cross(Vector3.up, RailInitialForward);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        InitialForward = transform.forward;
-        Initialright = Vector3.Cross(Vector3.up, InitialForward);
+        SetInitialForward(transform.forward);
         parentTransform = transform.parent;
         parentRigibody = parentTransform.GetComponent<Rigidbody>();
         downTime[0] = -1f;
@@ -92,7 +96,7 @@ public class TrolleyPlayerController : MonoBehaviour
         speed -= derailedDeceleration;
         if (speed < 0)
             speed = 0;
-        parentTransform.position += speed * InitialForward;
+        parentTransform.position += speed * RailInitialForward;
 
         // add vibrations to feel like you are vibrating
 
@@ -167,14 +171,14 @@ public class TrolleyPlayerController : MonoBehaviour
 
         if (angle > 0)
         {
-            transform.forward = Vector3.Slerp(InitialForward, Initialright, angle / 90f);
+            transform.forward = Vector3.Slerp(RailInitialForward, RailInitialRight, angle / 90f);
         }
         else
         {
-            transform.forward = Vector3.Slerp(InitialForward, -Initialright, angle / -90f);
+            transform.forward = Vector3.Slerp(RailInitialForward, -RailInitialRight, angle / -90f);
         }
 
-        parentTransform.position += speed * InitialForward;
+        parentTransform.position += speed * RailInitialForward;
     }
 
 
@@ -206,7 +210,7 @@ public class TrolleyPlayerController : MonoBehaviour
             {
                 // enterDerailment
                 CurrentMovementState = TrolleyMovementState.Derailed;
-                derailedVector = (angle > 0f) ? Initialright : -Initialright;
+                derailedVector = (angle > 0f) ? RailInitialRight : -RailInitialRight;
             }
 
         }
@@ -220,7 +224,7 @@ public class TrolleyPlayerController : MonoBehaviour
             {
                 // enterDerailment
                 CurrentMovementState = TrolleyMovementState.Derailed;
-                derailedVector = (angle > 0f) ? Initialright : -Initialright;
+                derailedVector = (angle > 0f) ? RailInitialRight : -RailInitialRight;
             }
         }
         else

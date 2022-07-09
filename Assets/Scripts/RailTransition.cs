@@ -14,6 +14,7 @@ public class RailTransition : MonoBehaviour
         {
             if (railStart)
             {
+                tp.SetInitialForward(transform.forward);
                 tp.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Railed);
             }
             else
