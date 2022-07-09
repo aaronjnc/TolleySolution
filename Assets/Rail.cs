@@ -26,7 +26,7 @@ public class Rail : MonoBehaviour
         Vector3 trolleyPos = playerController.gameObject.transform.position;
         for (int i = 0; i < Lanes.Length; i++)
         {
-            float dist = Vector3.Distance(Lanes[i].position, trolleyPos);
+            float dist = Mathf.Abs(Vector3.Distance(Lanes[i].position, trolleyPos));
             if (dist < shortestDist)
             {
                 lanePos = i;
