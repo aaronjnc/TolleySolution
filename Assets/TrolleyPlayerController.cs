@@ -22,6 +22,8 @@ public class TrolleyPlayerController : MonoBehaviour
     float acceleration = 0.001f;
     float maxSpeed = 0.3f;
     float minSpeed = -0.3f;
+    bool boosted = false;
+    float maxBoostedSpeed;
 
     float angle = 0f;
     float angleSpeed = 1f;
@@ -141,17 +143,30 @@ public class TrolleyPlayerController : MonoBehaviour
 
         if (Input.GetKey("up"))
         {
-            if (speed < maxSpeed)
+            if (!boosted)
             {
-                speed += acceleration;
+                if (speed < maxSpeed)
+                {
+                    speed += acceleration;
+                }
             }
         }
 
         if (Input.GetKey("down"))
         {
-            if (speed > minSpeed)
+            if (!boosted)
             {
-                speed -= acceleration;
+                if (speed > minSpeed)
+                {
+                    speed -= acceleration;
+                }
+            }
+            else
+            {
+                speed = Mathf.Clamp(speed + acceleration, minSpeed, maxBoostedSpeed);
+                maxBoostedSpeed = speed;
+                if (speed <= maxSpeed)
+                    boosted = false;
             }
         }
 
@@ -201,17 +216,30 @@ public class TrolleyPlayerController : MonoBehaviour
     {
         if (Input.GetKey("up"))
         {
-            if (speed < maxSpeed)
+            if (!boosted)
             {
-                speed += acceleration;
+                if (speed < maxSpeed)
+                {
+                    speed += acceleration;
+                }
             }
         }
 
         if (Input.GetKey("down"))
         {
-            if (speed > minSpeed)
+            if (!boosted)
             {
-                speed -= acceleration;
+                if (speed > minSpeed)
+                {
+                    speed -= acceleration;
+                }
+            }
+            else
+            {
+                speed = Mathf.Clamp(speed - acceleration, minSpeed, maxBoostedSpeed);
+                maxBoostedSpeed = speed;
+                if (speed <= maxSpeed)
+                    boosted = false;
             }
         }
 
@@ -308,7 +336,9 @@ public class TrolleyPlayerController : MonoBehaviour
 
     public void AddBoost(float morality)
     {
-
+        maxBoostedSpeed = .5f;
+        speed = .3f + morality * .06f;
+        boosted = true;
     }
 
 }
