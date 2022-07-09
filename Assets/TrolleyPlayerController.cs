@@ -31,6 +31,7 @@ public class TrolleyPlayerController : MonoBehaviour
     Vector3 InitialForward;
     Vector3 Initialright;
     Transform parentTransform = null;
+    Rigidbody parentRigibody = null;
     [SerializeField] private Camera mainCamera = null;
     [SerializeField] private GameObject cameraFree = null;
     private Quaternion railedCameraRotation;
@@ -43,6 +44,7 @@ public class TrolleyPlayerController : MonoBehaviour
         InitialForward = transform.forward;
         Initialright = Vector3.Cross(Vector3.up, InitialForward);
         parentTransform = transform.parent;
+        parentRigibody = parentTransform.GetComponent<Rigidbody>();
         downTime[0] = -1f;
         downTime[1] = -1f;
         railedCameraRotation = mainCamera.transform.localRotation;
@@ -157,7 +159,7 @@ public class TrolleyPlayerController : MonoBehaviour
             }
         }
 
-        //parentTransform += speed * InitialForward;
+        parentRigibody.velocity = speed * parentTransform.forward;
 
     }
     
@@ -286,6 +288,12 @@ public class TrolleyPlayerController : MonoBehaviour
         {
             transform.position = new Vector3(transform.position.x - 10f, transform.position.y, transform.position.z);
         }
+    }
+
+
+    public void AddBoost(float morality)
+    {
+
     }
 
 }
