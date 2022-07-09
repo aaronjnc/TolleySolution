@@ -9,12 +9,16 @@ public class RailTransition : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name.Equals("Trolley"))
+        TrolleyPlayerController tp = other.GetComponent<TrolleyPlayerController>();
+        if (tp != null)
         {
-            TrolleyPlayerController tp = other.GetComponent<TrolleyPlayerController>();
-            if (tp != null)
+            if (railStart)
             {
-                
+                tp.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Railed);
+            }
+            else
+            {
+                tp.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Free);
             }
         }
     }
