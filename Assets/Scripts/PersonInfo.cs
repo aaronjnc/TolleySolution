@@ -11,6 +11,11 @@ public class PersonInfo : MonoBehaviour {
     private bool original = true;
     private SpawnPoint spawnPoint;
     private int weight = 3;
+    private float XRot;
+    private void Start()
+    {
+        XRot = transform.eulerAngles.x;
+    }
     public void SetLocation(SpawnPoint spawnPoint)
     {
         weight = 0;
@@ -64,5 +69,13 @@ public class PersonInfo : MonoBehaviour {
         int weight = this.weight;
         this.weight = Mathf.Clamp(this.weight++, 0, 3);
         return weight;
+    }
+
+    private void FixedUpdate()
+    {
+        Vector3 targetPos = new Vector3(Camera.main.transform.position.x, transform.position.y,
+            Camera.main.transform.position.z);
+        transform.LookAt(targetPos);
+        transform.eulerAngles = new Vector3(XRot, transform.eulerAngles.y, transform.eulerAngles.z);
     }
 }

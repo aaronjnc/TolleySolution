@@ -62,7 +62,18 @@ public class PersonSpawner : MonoBehaviour
                     continue;
                 float random = person.GetWeight() * Random.Range(0f, 1f);
                 if (random > highest)
+                {
                     current = person.gameObject;
+                    highest = random;
+                }
+                else if (random == highest)
+                {
+                    random = Random.Range(0f, 1f);
+                    if (random > highest)
+                    {
+                        current = person.gameObject;
+                    }
+                }
             }
             chosen.Add(current);
         }
