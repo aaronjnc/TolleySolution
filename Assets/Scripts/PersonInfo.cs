@@ -64,7 +64,10 @@ public class PersonInfo : MonoBehaviour {
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name.Equals("Trolley"))
+        {
             spawnPoint.Kill();
+            other.gameObject.GetComponent<TrolleyPlayerController>().AddBoost(morality);
+        }
     }
 
     public int GetWeight()
