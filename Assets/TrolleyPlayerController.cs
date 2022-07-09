@@ -64,6 +64,11 @@ public class TrolleyPlayerController : MonoBehaviour
     Vector3 derailedVector;
     float derailedDeceleration = 0.003f;
 
+
+
+
+
+
     void UpdateDerailed()
     {
         transform.forward = derailedVector;
@@ -157,12 +162,18 @@ public class TrolleyPlayerController : MonoBehaviour
         }
 
 
-        checkSwitchTracks(Input.GetKeyDown("left"), ref downTime[0]);
-        checkSwitchTracks(Input.GetKeyDown("right"), ref downTime[1]);
+        if (Input.GetKey("f"))
+        {
+            CurrentMovementState = TrolleyMovementState.Free;
+        }
+
+
+        checkSwitchTracks(Input.GetKeyDown("left"), ref downTime[0], false);
+        checkSwitchTracks(Input.GetKeyDown("right"), ref downTime[1], true);
     }
 
 
-    private bool checkSwitchTracks(bool keyDown, ref float downTime)
+    private bool checkSwitchTracks(bool keyDown, ref float downTime, bool isRight)
     {
         if (keyDown)
         {
@@ -171,13 +182,12 @@ public class TrolleyPlayerController : MonoBehaviour
                 float deltaTime = Time.time - downTime;
                 if (deltaTime < doublePressTime)
                 {
-                    switchTracks(true);
+                    switchTracks(isRight);
                 }
                 else
                 {
                     downTime = Time.time;
                 }
-
             }
             else
             {
@@ -195,12 +205,12 @@ public class TrolleyPlayerController : MonoBehaviour
     {
         if (right)
         {
-            print("you are trying to switch tracks right ");
+            //print("you are trying to switch tracks right ");
+            transform.position = new Vector3(transform.position.x + 10f, transform.position.y, transform.position.z);
         }
         else
         {
-
-            print("you are trying to switch tracks");
+            transform.position = new Vector3(transform.position.x - 10f, transform.position.y, transform.position.z);
         }
     }
 
