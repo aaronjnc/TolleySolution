@@ -146,7 +146,7 @@ public class TrolleyPlayerController : MonoBehaviour
             parentTransform.Rotate(0f, -1f, 0f);
         }
 
-        parentRigibody.velocity = (speed*10) * parentTransform.forward;
+        parentRigibody.velocity = (speed*1000) * parentTransform.forward;
 
     }
     
