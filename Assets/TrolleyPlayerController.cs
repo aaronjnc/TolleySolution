@@ -57,12 +57,18 @@ public class TrolleyPlayerController : MonoBehaviour
         RailInitialRight = Vector3.Cross(Vector3.up, RailInitialForward);
     }
 
+    Vector3 FreeCameraOffset;
+
     // Start is called before the first frame update
     void Start()
     {
         SetInitialForward(transform.forward);
+
         parentTransform = transform.parent;
         parentRigibody = parentTransform.GetComponent<Rigidbody>();
+
+
+        FreeCameraOffset = mainCamera.transform.localPosition - transform.localPosition; 
         downTime[0] = -1f;
         downTime[1] = -1f;
         railedCameraRotation = mainCamera.transform.localRotation;
@@ -123,8 +129,8 @@ public class TrolleyPlayerController : MonoBehaviour
     void UpdateFree()
     {
         // move camera
-        //mainCamera.transform.position = cameraFree.transform.position;
-        //mainCamera.transform.forward = cameraFree.transform.forward;
+        mainCamera.transform.position = cameraFree.transform.position;
+        mainCamera.transform.forward = cameraFree.transform.forward;
 
         if (Input.GetKey("j"))
         {
@@ -288,12 +294,13 @@ public class TrolleyPlayerController : MonoBehaviour
         {
             //print("you are trying to switch tracks right ");
             transform.position = transform.position + 10 * RailInitialRight;
+            cameraFree.transform.position = cameraFree.transform.position + 10 * RailInitialRight;
             //transform.position = new Vector3(transform.position.x + 10f, transform.position.y, transform.position.z);
         }
         else
         {
             transform.position = transform.position - 10 * RailInitialRight;
-
+            cameraFree.transform.position = cameraFree.transform.position - 10 * RailInitialRight;
             //transform.position = new Vector3(transform.position.x - 10f, transform.position.y, transform.position.z);
         }
     }
