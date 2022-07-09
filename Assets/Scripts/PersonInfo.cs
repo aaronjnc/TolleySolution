@@ -11,7 +11,12 @@ public class PersonInfo : MonoBehaviour {
     private bool original = true;
     private SpawnPoint spawnPoint;
     private int weight = 3;
-    public void SetLocation(SpawnPoint spawnPoint)
+    private float XRot;
+    private void Start()
+    {
+        XRot = transform.eulerAngles.x;
+    }
+    public GameObject SetLocation(SpawnPoint spawnPoint)
     {
         weight = 0;
         if (!alive)
@@ -20,13 +25,14 @@ public class PersonInfo : MonoBehaviour {
             transform.position = spawnPoint.transform.position;
             alive = true;
             gameObject.SetActive(true);
+            return gameObject;
         }
         else
         {
             GameObject newChild = PersonSpawner.Instance.SpawnNew(this.gameObject);
             PersonInfo p = newChild.GetComponent<PersonInfo>();
             p.SetCopy();
-            p.SetLocation(spawnPoint);
+            return p.SetLocation(spawnPoint);
         }
     }
 
@@ -54,15 +60,25 @@ public class PersonInfo : MonoBehaviour {
             Destroy(gameObject);
         }
     }
-    public void OnCollisionEnter(Collision collision)
+
+    public void OnTriggerEnter(Collider other)
     {
-        //if trolley
-        spawnPoint.Kill();
+        if (other.gameObject.name.Equals("Trolley"))
+            spawnPoint.Kill();
     }
+
     public int GetWeight()
     {
         int weight = this.weight;
         this.weight = Mathf.Clamp(this.weight++, 0, 3);
         return weight;
+    }
+
+    private void FixedUpdate()
+    {
+        Vector3 targetPos = new Vector3(Camera.main.transform.position.x, transform.position.y,
+            Camera.main.transform.position.z);
+        transform.LookAt(targetPos);
+        transform.eulerAngles = new Vector3(XRot, transform.eulerAngles.y, transform.eulerAngles.z);
     }
 }
