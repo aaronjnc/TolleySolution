@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   personName: Baby
-  morality: 1
+  morality: 5
 --- !u!65 &1740136689364285672
 BoxCollider:
   m_ObjectHideFlags: 0
