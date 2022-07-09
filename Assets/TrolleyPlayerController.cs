@@ -110,6 +110,55 @@ public class TrolleyPlayerController : MonoBehaviour
         {
             CurrentMovementState = TrolleyMovementState.Railed;
         }
+
+
+
+        if (Input.GetKey("up"))
+        {
+            if (speed < maxSpeed)
+            {
+                speed += acceleration;
+            }
+        }
+
+        if (Input.GetKey("down"))
+        {
+            if (speed > minSpeed)
+            {
+                speed -= acceleration;
+            }
+        }
+
+        if (Input.GetKey("right"))
+        {
+            if (angle < maxAngle)
+            {
+                angle += angleSpeed;
+            }
+            else if (Input.GetKeyDown("space"))
+            {
+                // enterDerailment
+                CurrentMovementState = TrolleyMovementState.Derailed;
+                derailedVector = (angle > 0f) ? Initialright : -Initialright;
+            }
+
+        }
+        else if (Input.GetKey("left"))
+        {
+            if (angle > minAngle)
+            {
+                angle -= angleSpeed;
+            }
+            else if (Input.GetKeyDown("space"))
+            {
+                // enterDerailment
+                CurrentMovementState = TrolleyMovementState.Derailed;
+                derailedVector = (angle > 0f) ? Initialright : -Initialright;
+            }
+        }
+
+        //parentTransform += speed * InitialForward;
+
     }
     
 
