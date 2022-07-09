@@ -19,7 +19,7 @@ public class TrolleyPlayerController : MonoBehaviour
     public TrolleyMovementState CurrentMovementState { get; private set; } = TrolleyMovementState.Railed;
 
     public float speed = 0.000f;
-    float acceleration = 0.01f;
+    float acceleration = 0.001f;
     float maxSpeed = 0.3f;
     float minSpeed = -0.3f;
 
@@ -55,21 +55,31 @@ public class TrolleyPlayerController : MonoBehaviour
                 UpdateDerailed();
                 break;
         }
-        
+
+
     }
 
 
     Vector3 derailedVector;
-    float derailedDeceleration = 0.3f;
+    float derailedDeceleration = 0.003f;
 
     void UpdateDerailed()
     {
-        transform.forward = InitialForward;
+        transform.forward = derailedVector;
         speed -= derailedDeceleration;
         if (speed < 0)
             speed = 0;
         parentTransform.position += speed * InitialForward;
 
+
+
+        if (Input.GetKeyDown("space"))
+        {
+            // enter Rail
+            print("up arrow key is held down");
+            CurrentMovementState = TrolleyMovementState.Railed;
+            //derailedVector = (angle > 0f) ? Initialright : -Initialright;
+        }
 
 
     }
@@ -102,31 +112,32 @@ public class TrolleyPlayerController : MonoBehaviour
             {
                 angle += angleSpeed;
             }
-
-        }else
-        if (Input.GetKey("left"))
-        {
-            if (angle > minAngle)
-            {
-                angle -= angleSpeed;
-            }
-        }
-        else
-        {
-            angle = 0f;
-        }
-
-
-
-        if (Input.GetKey("space"))
-        {
-            if (Mathf.Abs(angle) > maxAngle)
+            else if (Input.GetKeyDown("space"))
             {
                 // enterDerailment
                 print("up arrow key is held down");
                 CurrentMovementState = TrolleyMovementState.Derailed;
                 derailedVector = (angle > 0f) ? Initialright : -Initialright;
             }
+
+        }
+        else if (Input.GetKey("left"))
+        {
+            if (angle > minAngle)
+            {
+                angle -= angleSpeed;
+            }else if (Input.GetKeyDown("space"))
+                {
+                    // enterDerailment
+                    print("up arrow key is held down");
+                    CurrentMovementState = TrolleyMovementState.Derailed;
+                    derailedVector = (angle > 0f) ? Initialright : -Initialright;
+                }
+        }
+        else
+        {
+            // TODO gradually transition angle to 0f;
+            angle = 0f;
         }
 
 
