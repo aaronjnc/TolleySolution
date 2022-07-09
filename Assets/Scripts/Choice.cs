@@ -26,6 +26,15 @@ public class Choice : MonoBehaviour
         }
     }
 
+    public void DisablePeople()
+    {
+        foreach (SpawnPoint sp in spawnPoints)
+        {
+            sp.DisablePerson();
+        }
+        StartCoroutine("WaitToSpawn");
+    }
+
     public IEnumerator WaitToSpawn()
     {
         yield return new WaitForSeconds(WaitTime);

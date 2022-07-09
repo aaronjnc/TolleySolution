@@ -31,6 +31,11 @@ public class TrolleyPlayerController : MonoBehaviour
     Vector3 InitialForward;
     Vector3 Initialright;
     Transform parentTransform = null;
+    Rigidbody parentRigibody = null;
+    [SerializeField] private Camera mainCamera = null;
+    [SerializeField] private GameObject cameraFree = null;
+    private Quaternion railedCameraRotation;
+    private Vector3 railedCameraPosition;
 
 
     // Start is called before the first frame update
@@ -39,7 +44,14 @@ public class TrolleyPlayerController : MonoBehaviour
         InitialForward = transform.forward;
         Initialright = Vector3.Cross(Vector3.up, InitialForward);
         parentTransform = transform.parent;
+        parentRigibody = parentTransform.GetComponent<Rigidbody>();
+        downTime[0] = -1f;
+        downTime[1] = -1f;
+        railedCameraRotation = mainCamera.transform.localRotation;
+        railedCameraPosition = mainCamera.transform.localPosition;
+
     }
+
 
     // Update is called once per frame
     void Update()
@@ -54,12 +66,20 @@ public class TrolleyPlayerController : MonoBehaviour
             case TrolleyMovementState.Derailed:
                 UpdateDerailed();
                 break;
+            case TrolleyMovementState.Free:
+                UpdateFree();
+                break;
         }
     }
 
 
     Vector3 derailedVector;
     float derailedDeceleration = 0.003f;
+
+
+
+
+
 
     void UpdateDerailed()
     {
@@ -81,9 +101,93 @@ public class TrolleyPlayerController : MonoBehaviour
 
     }
 
+
+    void UpdateFree()
+    {
+        // move camera
+        mainCamera.transform.position = cameraFree.transform.position;
+        mainCamera.transform.forward = cameraFree.transform.forward;
+
+        if (Input.GetKey("j"))
+        {
+            CurrentMovementState = TrolleyMovementState.Railed;
+        }
+
+
+
+        if (Input.GetKey("up"))
+        {
+            if (speed < maxSpeed)
+            {
+                speed += acceleration;
+            }
+        }
+
+        if (Input.GetKey("down"))
+        {
+            if (speed > minSpeed)
+            {
+                speed -= acceleration;
+            }
+        }
+
+        if (Input.GetKey("right"))
+        {
+            if (angle < maxAngle)
+            {
+                angle += angleSpeed;
+            }
+            else if (Input.GetKeyDown("space"))
+            {
+                // enterDerailment
+                CurrentMovementState = TrolleyMovementState.Derailed;
+                derailedVector = (angle > 0f) ? Initialright : -Initialright;
+            }
+
+        }
+        else if (Input.GetKey("left"))
+        {
+            if (angle > minAngle)
+            {
+                angle -= angleSpeed;
+            }
+            else if (Input.GetKeyDown("space"))
+            {
+                // enterDerailment
+                CurrentMovementState = TrolleyMovementState.Derailed;
+                derailedVector = (angle > 0f) ? Initialright : -Initialright;
+            }
+        }
+
+        parentRigibody.velocity = speed * parentTransform.forward;
+
+    }
+    
+
     void UpdateRailed()
     {
 
+        mainCamera.transform.localPosition = railedCameraPosition;
+        mainCamera.transform.localRotation = railedCameraRotation;
+
+        ReadInputsRailed();
+        
+
+        if (angle > 0)
+        {
+            transform.forward = Vector3.Slerp(InitialForward, Initialright, angle / 90f);
+        }
+        else
+        {
+            transform.forward = Vector3.Slerp(InitialForward, -Initialright, angle / -90f);
+        }
+
+        parentTransform.position += speed * InitialForward;
+    }
+
+
+    private void ReadInputsRailed()
+    {
         if (Input.GetKey("up"))
         {
             if (speed < maxSpeed)
@@ -133,17 +237,63 @@ public class TrolleyPlayerController : MonoBehaviour
             angle = 0f;
         }
 
-        if (angle > 0)
+
+        if (Input.GetKey("f"))
         {
-            transform.forward = Vector3.Slerp(InitialForward, Initialright, angle / 90f);
+            CurrentMovementState = TrolleyMovementState.Free;
+        }
+
+
+        checkSwitchTracks(Input.GetKeyDown("left"), ref downTime[0], false);
+        checkSwitchTracks(Input.GetKeyDown("right"), ref downTime[1], true);
+    }
+
+
+    private bool checkSwitchTracks(bool keyDown, ref float downTime, bool isRight)
+    {
+        if (keyDown)
+        {
+            if (downTime > 0)
+            {
+                float deltaTime = Time.time - downTime;
+                if (deltaTime < doublePressTime)
+                {
+                    switchTracks(isRight);
+                }
+                else
+                {
+                    downTime = Time.time;
+                }
+            }
+            else
+            {
+                downTime = Time.time;
+            }
+        }
+        return false;
+    }
+
+
+    private readonly float[] downTime = new float[2];
+    private float doublePressTime = 0.75f;
+
+    private void switchTracks(bool right)
+    {
+        if (right)
+        {
+            //print("you are trying to switch tracks right ");
+            transform.position = new Vector3(transform.position.x + 10f, transform.position.y, transform.position.z);
         }
         else
         {
-            transform.forward = Vector3.Slerp(InitialForward, -Initialright, angle / -90f);
+            transform.position = new Vector3(transform.position.x - 10f, transform.position.y, transform.position.z);
         }
-
-        parentTransform.position += speed * InitialForward;
     }
 
+
+    public void AddBoost(float morality)
+    {
+
+    }
 
 }
