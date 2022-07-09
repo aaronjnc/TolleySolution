@@ -3494,6 +3494,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RailBegin
       objectReference: {fileID: 0}
+    - target: {fileID: 8121011480153568715, guid: ba624ac908506264e9d02b9c31480d49, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba624ac908506264e9d02b9c31480d49, type: 3}
 --- !u!4 &837510874 stripped
@@ -6025,7 +6029,7 @@ Transform:
   - {fileID: 1341760411}
   - {fileID: 106388222}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
 --- !u!1 &1317938550
 GameObject:
@@ -9257,6 +9261,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6338079259477214598, guid: 172ea0e9cc5154620a7b2ba886030098, type: 3}
+      propertyPath: m_Constraints
+      value: 116
+      objectReference: {fileID: 0}
     - target: {fileID: 7137425009707802230, guid: 172ea0e9cc5154620a7b2ba886030098, type: 3}
       propertyPath: m_Name
       value: PlayerPrefab
