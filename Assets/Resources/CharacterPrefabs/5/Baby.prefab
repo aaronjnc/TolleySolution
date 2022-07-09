@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1685864037610147268}
   - component: {fileID: 2994118056186627041}
   m_Layer: 0
-  m_Name: TestGuy
+  m_Name: Baby
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   personName: Baby
-  morality: 3
+  morality: 5
 --- !u!65 &1685864037610147268
 BoxCollider:
   m_ObjectHideFlags: 0
