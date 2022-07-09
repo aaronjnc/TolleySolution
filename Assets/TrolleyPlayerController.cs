@@ -184,12 +184,12 @@ using UnityEngine;
 
         if (Input.GetKey("right"))
         {
-            parentTransform.Rotate(0f, 1f, 0f);
+            parentTransform.RotateAround(transform.position, Vector3.up, 1f);
 
         }
         else if (Input.GetKey("left"))
         {
-            parentTransform.Rotate(0f, -1f, 0f);
+            parentTransform.RotateAround(transform.position, Vector3.up, -1f);
         }
 
         Vector3 forward = parentTransform.forward;
@@ -197,7 +197,7 @@ using UnityEngine;
 
         forward.y = 0f;
 
-        parentRigibody.velocity = (speed * 1000) * forward;
+        parentRigibody.velocity = (speed * 200) * forward;
 
     }
 
