@@ -31,6 +31,10 @@ public class TrolleyPlayerController : MonoBehaviour
     Vector3 InitialForward;
     Vector3 Initialright;
     Transform parentTransform = null;
+    [SerializeField] private Camera mainCamera = null;
+    [SerializeField] private GameObject cameraFree = null;
+    private Quaternion railedCameraRotation;
+    private Vector3 railedCameraPosition;
 
 
     // Start is called before the first frame update
@@ -41,6 +45,9 @@ public class TrolleyPlayerController : MonoBehaviour
         parentTransform = transform.parent;
         downTime[0] = -1f;
         downTime[1] = -1f;
+        railedCameraRotation = mainCamera.transform.localRotation;
+        railedCameraPosition = mainCamera.transform.localPosition;
+
     }
 
 
@@ -56,6 +63,9 @@ public class TrolleyPlayerController : MonoBehaviour
                 break;
             case TrolleyMovementState.Derailed:
                 UpdateDerailed();
+                break;
+            case TrolleyMovementState.Free:
+                UpdateFree();
                 break;
         }
     }
@@ -89,10 +99,25 @@ public class TrolleyPlayerController : MonoBehaviour
 
     }
 
+
+    void UpdateFree()
+    {
+        // move camera
+        mainCamera.transform.position = cameraFree.transform.position;
+        mainCamera.transform.forward = cameraFree.transform.forward;
+
+        if (Input.GetKey("j"))
+        {
+            CurrentMovementState = TrolleyMovementState.Railed;
+        }
+    }
     
 
     void UpdateRailed()
     {
+
+        mainCamera.transform.localPosition = railedCameraPosition;
+        mainCamera.transform.localRotation = railedCameraRotation;
 
         ReadInputsRailed();
         
