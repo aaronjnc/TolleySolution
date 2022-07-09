@@ -26,14 +26,11 @@ public class RailTransition : MonoBehaviour
         {
             if (railStart)
             {
-                tp.SetInitialForward(transform.forward);
-                tp.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Railed);
-                tp.SetCameraPos(cameraPos);
+                rail.StartRail();
             }
             else
             {
-                tp.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Free);
-                tp.ResetCamera();
+                rail.StopRail();
             }
         }
     }
