@@ -55,8 +55,6 @@ public class TrolleyPlayerController : MonoBehaviour
                 UpdateDerailed();
                 break;
         }
-
-
     }
 
 
@@ -71,14 +69,13 @@ public class TrolleyPlayerController : MonoBehaviour
             speed = 0;
         parentTransform.position += speed * InitialForward;
 
+        // add vibrations to feel like you are vibrating
 
+        // add sparks
 
         if (Input.GetKeyDown("space"))
         {
-            // enter Rail
-            print("up arrow key is held down");
             CurrentMovementState = TrolleyMovementState.Railed;
-            //derailedVector = (angle > 0f) ? Initialright : -Initialright;
         }
 
 
@@ -93,7 +90,6 @@ public class TrolleyPlayerController : MonoBehaviour
             {
                 speed += acceleration;
             }
-            //print("up arrow key is held down");
         }
 
         if (Input.GetKey("down"))
@@ -106,8 +102,6 @@ public class TrolleyPlayerController : MonoBehaviour
 
         if (Input.GetKey("right"))
         {
-
-
             if (angle < maxAngle)
             {
                 angle += angleSpeed;
@@ -115,7 +109,6 @@ public class TrolleyPlayerController : MonoBehaviour
             else if (Input.GetKeyDown("space"))
             {
                 // enterDerailment
-                print("up arrow key is held down");
                 CurrentMovementState = TrolleyMovementState.Derailed;
                 derailedVector = (angle > 0f) ? Initialright : -Initialright;
             }
@@ -126,22 +119,19 @@ public class TrolleyPlayerController : MonoBehaviour
             if (angle > minAngle)
             {
                 angle -= angleSpeed;
-            }else if (Input.GetKeyDown("space"))
-                {
-                    // enterDerailment
-                    print("up arrow key is held down");
-                    CurrentMovementState = TrolleyMovementState.Derailed;
-                    derailedVector = (angle > 0f) ? Initialright : -Initialright;
-                }
+            }
+            else if (Input.GetKeyDown("space"))
+            {
+                // enterDerailment
+                CurrentMovementState = TrolleyMovementState.Derailed;
+                derailedVector = (angle > 0f) ? Initialright : -Initialright;
+            }
         }
         else
         {
             // TODO gradually transition angle to 0f;
             angle = 0f;
         }
-
-
-
 
         if (angle > 0)
         {
@@ -151,7 +141,6 @@ public class TrolleyPlayerController : MonoBehaviour
         {
             transform.forward = Vector3.Slerp(InitialForward, -Initialright, angle / -90f);
         }
-
 
         parentTransform.position += speed * InitialForward;
     }
