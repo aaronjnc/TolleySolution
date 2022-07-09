@@ -54,7 +54,10 @@ public class TrolleyPlayerController : MonoBehaviour
         else if (CurrentMovementState == TrolleyMovementState.Railed)
         {
             parentRigibody.velocity = Vector3.zero;
-            Camera.main.transform.SetParent(transform.parent);
+            /*Camera.main.transform.SetParent(transform);
+            mainCamera.transform.localPosition = railedCameraPosition;
+            mainCamera.transform.localRotation = railedCameraRotation;
+            Camera.main.transform.SetParent(transform.parent);*/
         }
     }
 
@@ -62,6 +65,19 @@ public class TrolleyPlayerController : MonoBehaviour
     {
         RailInitialForward = forward;
         RailInitialRight = Vector3.Cross(Vector3.up, RailInitialForward);
+    }
+
+    public void SetCameraPos(Transform pos)
+    {
+        mainCamera.transform.position = pos.position;
+        mainCamera.transform.rotation = pos.rotation;
+    }
+
+    public void ResetCamera()
+    {
+        mainCamera.transform.position = cameraFree.transform.position;
+        mainCamera.transform.forward = cameraFree.transform.forward;
+        ResetRotation();
     }
 
     Vector3 FreeCameraOffset;
@@ -78,9 +94,10 @@ public class TrolleyPlayerController : MonoBehaviour
         FreeCameraOffset = mainCamera.transform.localPosition - transform.localPosition; 
         downTime[0] = -1f;
         downTime[1] = -1f;
-        railedCameraRotation = mainCamera.transform.localRotation;
-        railedCameraPosition = mainCamera.transform.localPosition;
-
+        //mainCamera.transform.SetParent(transform);
+        //railedCameraRotation = mainCamera.transform.localRotation;
+        //railedCameraPosition = mainCamera.transform.localPosition;
+        //mainCamera.transform.SetParent(transform.parent);
     }
 
 
@@ -136,9 +153,9 @@ public class TrolleyPlayerController : MonoBehaviour
     void UpdateFree()
     {
         // move camera
-        mainCamera.transform.position = cameraFree.transform.position;
-        mainCamera.transform.forward = cameraFree.transform.forward;
-        ResetRotation();
+        //mainCamera.transform.position = cameraFree.transform.position;
+        //mainCamera.transform.forward = cameraFree.transform.forward;
+        //ResetRotation();
 
         if (Input.GetKey("j"))
         {
@@ -199,8 +216,8 @@ public class TrolleyPlayerController : MonoBehaviour
     void UpdateRailed()
     {
 
-        mainCamera.transform.localPosition = railedCameraPosition;
-        mainCamera.transform.localRotation = railedCameraRotation;
+        //mainCamera.transform.localPosition = railedCameraPosition;
+        //mainCamera.transform.localRotation = railedCameraRotation;
 
         ReadInputsRailed();
 
