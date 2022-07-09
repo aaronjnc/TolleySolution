@@ -16,7 +16,7 @@ public class TrolleyPlayerController : MonoBehaviour
         End
     }
 
-    public TrolleyMovementState CurrentMovementState { get; private set; } = TrolleyMovementState.Railed;
+    public TrolleyMovementState CurrentMovementState { get; private set; } = TrolleyMovementState.Free;
 
     public float speed = 0.000f;
     float acceleration = 0.001f;
