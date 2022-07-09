@@ -40,6 +40,15 @@ public class TrolleyPlayerController : MonoBehaviour
     public void SetMovementState(TrolleyMovementState state)
     {
         CurrentMovementState = state;
+        if (CurrentMovementState == TrolleyMovementState.Free)
+        {
+            Camera.main.transform.SetParent(transform);
+        }
+        else if (CurrentMovementState == TrolleyMovementState.Railed)
+        {
+            parentRigibody.velocity = Vector3.zero;
+            Camera.main.transform.SetParent(transform.parent);
+        }
     }
 
     public void SetInitialForward(Vector3 forward)
@@ -104,7 +113,7 @@ public class TrolleyPlayerController : MonoBehaviour
 
         if (Input.GetKeyDown("space"))
         {
-            CurrentMovementState = TrolleyMovementState.Railed;
+            SetMovementState(TrolleyMovementState.Railed);
         }
 
 
@@ -114,12 +123,12 @@ public class TrolleyPlayerController : MonoBehaviour
     void UpdateFree()
     {
         // move camera
-        mainCamera.transform.position = cameraFree.transform.position;
-        mainCamera.transform.forward = cameraFree.transform.forward;
+        //mainCamera.transform.position = cameraFree.transform.position;
+        //mainCamera.transform.forward = cameraFree.transform.forward;
 
         if (Input.GetKey("j"))
         {
-            CurrentMovementState = TrolleyMovementState.Railed;
+            SetMovementState(TrolleyMovementState.Railed);
         }
 
 
@@ -209,7 +218,7 @@ public class TrolleyPlayerController : MonoBehaviour
             else if (Input.GetKeyDown("space"))
             {
                 // enterDerailment
-                CurrentMovementState = TrolleyMovementState.Derailed;
+                SetMovementState(TrolleyMovementState.Derailed);
                 derailedVector = (angle > 0f) ? RailInitialRight : -RailInitialRight;
             }
 
@@ -223,7 +232,7 @@ public class TrolleyPlayerController : MonoBehaviour
             else if (Input.GetKeyDown("space"))
             {
                 // enterDerailment
-                CurrentMovementState = TrolleyMovementState.Derailed;
+                SetMovementState(TrolleyMovementState.Derailed);
                 derailedVector = (angle > 0f) ? RailInitialRight : -RailInitialRight;
             }
         }
@@ -236,7 +245,7 @@ public class TrolleyPlayerController : MonoBehaviour
 
         if (Input.GetKey("f"))
         {
-            CurrentMovementState = TrolleyMovementState.Free;
+            SetMovementState(TrolleyMovementState.Free);
         }
 
 
@@ -278,11 +287,14 @@ public class TrolleyPlayerController : MonoBehaviour
         if (right)
         {
             //print("you are trying to switch tracks right ");
-            transform.position = new Vector3(transform.position.x + 10f, transform.position.y, transform.position.z);
+            transform.position = transform.position + 10 * RailInitialRight;
+            //transform.position = new Vector3(transform.position.x + 10f, transform.position.y, transform.position.z);
         }
         else
         {
-            transform.position = new Vector3(transform.position.x - 10f, transform.position.y, transform.position.z);
+            transform.position = transform.position - 10 * RailInitialRight;
+
+            //transform.position = new Vector3(transform.position.x - 10f, transform.position.y, transform.position.z);
         }
     }
 
