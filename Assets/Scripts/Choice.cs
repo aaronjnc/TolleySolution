@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Choice : MonoBehaviour
 {
@@ -35,5 +36,15 @@ public class Choice : MonoBehaviour
     {
         yield return new WaitForSeconds(WaitTime);
         SpawnPeople();
+    }
+
+    public void FillImages(ChoiceUI[] images)
+    {
+        for (int i = 0; i < spawnPoints.Length; i++)
+        {
+            PersonInfo person = spawnPoints[i].GetPersonInfo();
+            Texture image = person.GetComponent<MeshRenderer>().material.mainTexture;
+            images[i].SetUp(image, person.GetPersonName());
+        }
     }
 }
