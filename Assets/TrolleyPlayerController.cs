@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-    
 
-    public class TrolleyPlayerController : MonoBehaviour
-    {
+
+public class TrolleyPlayerController : MonoBehaviour
+{
     //Vector3 speed = new Vector3(0.1f, 0, 0);
     //Vector3 acceleration = new Vector3 (0.1f, 0, 0);
 
@@ -24,19 +24,27 @@ using UnityEngine;
     public float acceleration { get; private set; } = 0.001f;
     public float maxSpeed { get; private set; } = 0.6f;
     public float minSpeed { get; private set; } = -0.3f;
-    public bool boosted { get; private set; }  = false;
+    public bool boosted { get; private set; } = false;
     public float maxBoostedSpeed { get; private set; }
 
     private SparkController sparkController;
 
     //public Vector3 RailInitialForward;
     //Vector3 RailInitialRight;
-    public Transform parentTransform { get; private set; }  = null;
+    public Transform parentTransform { get; private set; } = null;
     Rigidbody parentRigibody = null;
     [SerializeField] private Camera mainCamera = null;
     [SerializeField] public GameObject cameraFree = null;
     private Vector3 camRelPosition = Vector3.zero;
     private Vector3 camRelRotation = Vector3.zero;
+
+    public int lapBoost { get; private set; } = 1;
+
+
+    public void SetLapBoost(int boost)
+    {
+        lapBoost = boost;
+    }
 
     public void ResetRotation()
     {
@@ -162,7 +170,7 @@ using UnityEngine;
         speed -= derailedDeceleration;
         if (speed < 0)
             speed = 0;
-        parentTransform.position += speed * DerailedSpeedMultiplier * tmsRailed.RailInitialForward;
+        parentTransform.position += speed * DerailedSpeedMultiplier * lapBoost * tmsRailed.RailInitialForward;
 
         // add vibrations to feel like you are vibrating
 
@@ -225,7 +233,7 @@ using UnityEngine;
 
         forward.y = 0f;
 
-        parentRigibody.velocity = (speed * freeSpeedMultiplier) * forward;
+        parentRigibody.velocity = (speed * freeSpeedMultiplier * lapBoost) * forward;
 
     }
 

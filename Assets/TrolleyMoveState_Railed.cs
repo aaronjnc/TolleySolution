@@ -55,7 +55,7 @@ public class TrolleyMoveState_Railed : MonoBehaviour
             }
         }
 
-        tp.parentTransform.position += tp.speed * RailedSpeedMultiplier * RailInitialForward;
+        tp.parentTransform.position += tp.speed * RailedSpeedMultiplier * tp.lapBoost * RailInitialForward;
     }
 
     private float RailedSpeedMultiplier = 5;
