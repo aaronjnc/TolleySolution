@@ -10,7 +10,7 @@ public class PersonInfo : MonoBehaviour {
     private bool alive = false;
     private bool original = true;
     private SpawnPoint spawnPoint;
-    private int weight = 3;
+    private int weight = 5;
     private float XRot;
     private void Start()
     {
@@ -77,7 +77,7 @@ public class PersonInfo : MonoBehaviour {
     public int GetWeight()
     {
         int weight = this.weight;
-        this.weight = Mathf.Clamp(this.weight++, 0, 3);
+        this.weight = Mathf.Clamp(this.weight + 1, 0, 5);
         return weight;
     }
 
