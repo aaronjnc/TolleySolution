@@ -27,7 +27,7 @@ using UnityEngine;
     public bool boosted { get; private set; }  = false;
     public float maxBoostedSpeed { get; private set; }
 
-        
+    private SparkController sparkController;
 
     //public Vector3 RailInitialForward;
     //Vector3 RailInitialRight;
@@ -46,12 +46,26 @@ using UnityEngine;
     public void SetMovementState(TrolleyMovementState state)
     {
         CurrentMovementState = state;
-        if (CurrentMovementState == TrolleyMovementState.Free)
+
+        switch (CurrentMovementState)
         {
+            case TrolleyMovementState.Railed:
+                parentRigibody.velocity = Vector3.zero;
+                break;
+            case TrolleyMovementState.Free:
+                break;
         }
-        else if (CurrentMovementState == TrolleyMovementState.Railed)
+    }
+
+    public void SetSparks(bool right, bool enabled = true)
+    {
+        if (right)
         {
-            parentRigibody.velocity = Vector3.zero;
+            sparkController.EnableRightSparks(enabled);
+        }
+        else
+        {
+            sparkController.EnableLeftSparks(enabled);
         }
     }
 
@@ -86,6 +100,8 @@ using UnityEngine;
 
         parentTransform = transform.parent;
         parentRigibody = parentTransform.GetComponent<Rigidbody>();
+
+        sparkController = GetComponent<SparkController>();
 
         mainCamera.transform.SetParent(transform);
         camRelPosition = mainCamera.transform.localPosition;
@@ -154,6 +170,8 @@ using UnityEngine;
         if (Input.GetKeyDown("space"))
         {
             SetMovementState(TrolleyMovementState.Railed);
+            SetSparks(true, false);
+            SetSparks(false, false);
         }
 
 

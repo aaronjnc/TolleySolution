@@ -90,6 +90,7 @@ public class TrolleyMoveState_Railed : MonoBehaviour
                 // enterDerailment
                 tp.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Derailed);
                 tp.SetDerailedVector((angle > 0f) ? RailInitialRight : -RailInitialRight);
+                tp.SetSparks(true);
             }
 
         }
@@ -104,6 +105,7 @@ public class TrolleyMoveState_Railed : MonoBehaviour
                 // enterDerailment
                 tp.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Derailed);
                 tp.SetDerailedVector((angle > 0f) ? RailInitialRight : -RailInitialRight);
+                tp.SetSparks(false);
             }
         }
         else
