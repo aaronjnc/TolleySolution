@@ -53,6 +53,7 @@ public class PersonInfo : MonoBehaviour {
     }
     public void Kill()
     {
+        BloodManager.Instance.GetBlood(transform.position);
         if (original)
         {
             gameObject.SetActive(false);
