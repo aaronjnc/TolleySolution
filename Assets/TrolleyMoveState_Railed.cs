@@ -2,172 +2,173 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-    public class TrolleyMoveState_Railed : MonoBehaviour
+public class TrolleyMoveState_Railed : MonoBehaviour
+{
+    // Start is called before the first frame update
+    void Start()
     {
-        // Start is called before the first frame update
-        void Start()
+        tp = GetComponent<TrolleyPlayerController>();
+        downTime[0] = -1f;
+        downTime[1] = -1f;
+    }
+
+    TrolleyPlayerController tp = null;
+    public Vector3 RailInitialForward;
+    Vector3 RailInitialRight;
+    float angle = 0f;
+
+    float angleSpeed = 1f;
+    float maxAngle = 25f;
+    float minAngle = -25f;
+
+    Rail currentRail = null;
+
+    public void SetInitialForward(Vector3 forward)
+    {
+        RailInitialForward = forward;
+        RailInitialRight = Vector3.Cross(Vector3.up, RailInitialForward);
+    }
+
+
+
+    public void UpdateRailed()
+    {
+
+        //mainCamera.transform.localPosition = railedCameraPosition;
+        //mainCamera.transform.localRotation = railedCameraRotation;
+
+        ReadInputsRailed();
+
+        if (tp.CurrentMovementState == TrolleyPlayerController.TrolleyMovementState.Free)
         {
-            tp = GetComponent<TrolleyPlayerController>();
-            downTime[0] = -1f;
-            downTime[1] = -1f;
+            transform.forward = RailInitialForward;
         }
-
-        TrolleyPlayerController tp = null;
-        public Vector3 RailInitialForward;
-        Vector3 RailInitialRight;
-        float angle = 0f;
-
-        float angleSpeed = 1f;
-        float maxAngle = 25f;
-        float minAngle = -25f;
-
-        public void SetInitialForward(Vector3 forward)
+        else
         {
-            RailInitialForward = forward;
-            RailInitialRight = Vector3.Cross(Vector3.up, RailInitialForward);
-        }
-
-
-
-        public void UpdateRailed()
-        {
-
-            //mainCamera.transform.localPosition = railedCameraPosition;
-            //mainCamera.transform.localRotation = railedCameraRotation;
-
-            ReadInputsRailed();
-
-            if (tp.CurrentMovementState == TrolleyPlayerController.TrolleyMovementState.Free)
+            if (angle > 0)
             {
-                transform.forward = RailInitialForward;
+                transform.forward = Vector3.Slerp(RailInitialForward, RailInitialRight, angle / 90f);
             }
             else
             {
-                if (angle > 0)
+                transform.forward = Vector3.Slerp(RailInitialForward, -RailInitialRight, angle / -90f);
+            }
+        }
+
+        tp.parentTransform.position += tp.speed * RailInitialForward;
+    }
+
+
+    private void ReadInputsRailed()
+    {
+        if (Input.GetKey("up"))
+        {
+            if (!tp.boosted)
+            {
+                if (tp.speed < tp.maxSpeed)
                 {
-                    transform.forward = Vector3.Slerp(RailInitialForward, RailInitialRight, angle / 90f);
-                }
-                else
-                {
-                    transform.forward = Vector3.Slerp(RailInitialForward, -RailInitialRight, angle / -90f);
+                    tp.speed += tp.acceleration;
                 }
             }
+        }
 
-            tp.parentTransform.position += tp.speed * RailInitialForward;
+        if (Input.GetKey("down"))
+        {
+            tp.Declerate();
+        }
+
+        if (Input.GetKey("right"))
+        {
+            if (angle < maxAngle)
+            {
+                angle += angleSpeed;
+            }
+            else if (Input.GetKeyDown("space"))
+            {
+                // enterDerailment
+                tp.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Derailed);
+                tp.SetDerailedVector((angle > 0f) ? RailInitialRight : -RailInitialRight);
+            }
+
+        }
+        else if (Input.GetKey("left"))
+        {
+            if (angle > minAngle)
+            {
+                angle -= angleSpeed;
+            }
+            else if (Input.GetKeyDown("space"))
+            {
+                // enterDerailment
+                tp.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Derailed);
+                tp.SetDerailedVector((angle > 0f) ? RailInitialRight : -RailInitialRight);
+            }
+        }
+        else
+        {
+            // TODO gradually transition angle to 0f;
+            angle = 0f;
         }
 
 
-        private void ReadInputsRailed()
+        if (Input.GetKey("f"))
         {
-            if (Input.GetKey("up"))
-            {
-                if (!tp.boosted)
-                {
-                    if (tp.speed < tp.maxSpeed)
-                    {
-                        tp.speed += tp.acceleration;
-                    }
-                }
-            }
-
-            if (Input.GetKey("down"))
-            {
-                tp.Declerate();
-            }
-
-            if (Input.GetKey("right"))
-            {
-                if (angle < maxAngle)
-                {
-                    angle += angleSpeed;
-                }
-                else if (Input.GetKeyDown("space"))
-                {
-                    // enterDerailment
-                    tp.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Derailed);
-                    tp.SetDerailedVector((angle > 0f) ? RailInitialRight : -RailInitialRight);
-                }
-
-            }
-            else if (Input.GetKey("left"))
-            {
-                if (angle > minAngle)
-                {
-                    angle -= angleSpeed;
-                }
-                else if (Input.GetKeyDown("space"))
-                {
-                    // enterDerailment
-                    tp.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Derailed);
-                    tp.SetDerailedVector((angle > 0f) ? RailInitialRight : -RailInitialRight);
-                }
-            }
-            else
-            {
-                // TODO gradually transition angle to 0f;
-                angle = 0f;
-            }
-
-
-            if (Input.GetKey("f"))
-            {
-                tp.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Free);
-            }
-
-
-            checkSwitchTracks(Input.GetKeyDown("left"), ref downTime[0], false);
-            checkSwitchTracks(Input.GetKeyDown("right"), ref downTime[1], true);
+            tp.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Free);
         }
 
 
-        private bool checkSwitchTracks(bool keyDown, ref float downTime, bool isRight)
+        checkSwitchTracks(Input.GetKeyDown("left"), ref downTime[0], false);
+        checkSwitchTracks(Input.GetKeyDown("right"), ref downTime[1], true);
+    }
+
+
+    private bool checkSwitchTracks(bool keyDown, ref float downTime, bool isRight)
+    {
+        if (keyDown)
         {
-            if (keyDown)
+            if (downTime > 0)
             {
-                if (downTime > 0)
+                float deltaTime = Time.time - downTime;
+                if (deltaTime < doublePressTime)
                 {
-                    float deltaTime = Time.time - downTime;
-                    if (deltaTime < doublePressTime)
-                    {
-                        switchTracks(isRight);
-                    }
-                    else
-                    {
-                        downTime = Time.time;
-                    }
+                    switchTracks(isRight);
                 }
                 else
                 {
                     downTime = Time.time;
                 }
             }
-            return false;
-        }
-
-
-        private readonly float[] downTime = new float[2];
-        private float doublePressTime = 0.75f;
-
-        private void switchTracks(bool right)
-        {
-            if (right)
-            {
-                //print("you are trying to switch tracks right ");
-                transform.position = transform.position + 10 * RailInitialRight;
-                tp.cameraFree.transform.position = tp.cameraFree.transform.position + 10 * RailInitialRight;
-                //transform.position = new Vector3(transform.position.x + 10f, transform.position.y, transform.position.z);
-            }
             else
             {
-                transform.position = transform.position - 10 * RailInitialRight;
-                tp.cameraFree.transform.position = tp.cameraFree.transform.position - 10 * RailInitialRight;
-                //transform.position = new Vector3(transform.position.x - 10f, transform.position.y, transform.position.z);
+                downTime = Time.time;
             }
         }
+        return false;
+    }
 
-        // Update is called once per frame
-        void Update()
+
+    private readonly float[] downTime = new float[2];
+    private float doublePressTime = 0.75f;
+
+    private void switchTracks(bool right)
+    {
+        if (right)
         {
-
+            currentRail.SwitchLane(1);
+        }
+        else
+        {
+            currentRail.SwitchLane(-1);
         }
     }
+
+    public void SetRail(Rail rail)
+    {
+        currentRail = rail;
+    }
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+}
