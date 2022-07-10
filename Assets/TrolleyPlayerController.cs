@@ -26,7 +26,7 @@ public class TrolleyPlayerController : MonoBehaviour
 
     public Transform parentTransform { get; private set; } = null;
     public Rigidbody parentRigibody = null;
-    [SerializeField] private Camera mainCamera = null;
+    [SerializeField] public Camera mainCamera = null;
     [SerializeField] public GameObject cameraFree = null;
     private Vector3 camRelPosition = Vector3.zero;
     private Vector3 camRelRotation = Vector3.zero;
@@ -281,7 +281,14 @@ public class TrolleyPlayerController : MonoBehaviour
         float tempLapBoost = lapBoost;
         if (speed <= Mathf.Abs(lapBoost))
             tempLapBoost = 0;
-        parentRigibody.velocity = ((speed + tempLapBoost) * freeSpeedMultiplier) * forward;
+
+        if (boostTime > 0f && Time.time > boostTime + boostDuration)
+        {
+            boostMultiplier = 1f;
+            boostTime = -1f;
+        }
+
+        parentRigibody.velocity = ((speed + tempLapBoost) * freeSpeedMultiplier) * boostMultiplier * forward;
 
     }
 
@@ -289,9 +296,21 @@ public class TrolleyPlayerController : MonoBehaviour
 
     public void AddBoost(float morality)
     {
-        parentRigibody.AddForce(transform.forward * baseImpulse * morality);
-        speed = parentRigibody.velocity.magnitude / freeSpeedMultiplier;
+        if(boostTime > 0f)
+        mainCamera.transform.position = mainCamera.transform.position - (10f* tmsRailed.RailInitialForward);
+
+        boostTime = Time.time;
+        boostDuration = morality / 2f;
+        boostMultiplier = 2f;
+        
+        //parentRigibody.AddForce(transform.forward * baseImpulse * morality);
+        //speed = parentRigibody.velocity.magnitude / freeSpeedMultiplier;
     }
+
+    public float boostDuration;  
+    public float boostMultiplier = 2f;
+    public float boostTime = 0f;
+
 
     public void SetTurning(bool right)
     {

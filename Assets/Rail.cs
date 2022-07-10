@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Rail : MonoBehaviour
 {
@@ -18,6 +19,12 @@ public class Rail : MonoBehaviour
 
     private Vector3 directionSwitch = Vector3.zero;
 
+    [SerializeField]
+    private Choice[] choices;
+    [SerializeField]
+    private ChoiceUI[] images;
+    private int currentChoice = 0;
+
     private void Start()
     {
         if (Lanes[0].position.x == Lanes[1].position.x)
@@ -32,6 +39,14 @@ public class Rail : MonoBehaviour
 
     public void StartRail()
     {
+        for (int i = 0; i < images.Length; i++)
+        {
+            if (i < Lanes.Length)
+                images[i].gameObject.SetActive(true);
+            else
+                images[i].gameObject.SetActive(false);
+        }
+        DisplayChoices();
         playerController.SetInitialForward(transform.forward);
         playerController.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Railed);
         playerController.SetCameraPos(cameraPos);
@@ -48,13 +63,24 @@ public class Rail : MonoBehaviour
             }
         }
         currentLane = lanePos;
+        images[currentLane].EnterLane();
         Vector3 newPos = new Vector3(Lanes[lanePos].position.x, trolleyPos.y, Lanes[lanePos].position.z);
         playerController.gameObject.transform.position = newPos;
     }
 
+    public void DisplayChoices()
+    {
+        if (currentChoice >= choices.Length)
+            return;
+        choices[currentChoice].FillImages(images);
+        currentChoice++;
+    }
+
     public void SwitchLane(int i)
     {
+        images[currentLane].LeaveLane();
         currentLane = Mathf.Clamp(currentLane + i, 0, Lanes.Length - 1);
+        images[currentLane].EnterLane();
         Vector3 playerPos = playerController.gameObject.transform.position;
         Vector3 newPos = Vector3.zero;
         if (directionSwitch.x == int.MaxValue)
@@ -66,6 +92,11 @@ public class Rail : MonoBehaviour
 
     public void StopRail()
     {
+        images[currentLane].LeaveLane();
+        for (int i = 0; i < images.Length; i++)
+        {
+            images[i].gameObject.SetActive(false);
+        }
         playerController.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Free);
         playerController.ResetCamera();
     }
