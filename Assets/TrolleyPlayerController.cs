@@ -6,9 +6,6 @@ using UnityEngine;
 
 public class TrolleyPlayerController : MonoBehaviour
 {
-    //Vector3 speed = new Vector3(0.1f, 0, 0);
-    //Vector3 acceleration = new Vector3 (0.1f, 0, 0);
-
     public enum TrolleyMovementState
     {
         Railed,
@@ -24,26 +21,23 @@ public class TrolleyPlayerController : MonoBehaviour
     public float acceleration { get; private set; } = 0.001f;
     public float maxSpeed { get; private set; } = 0.6f;
     public float minSpeed { get; private set; } = -0.3f;
-    public bool boosted { get; private set; } = false;
-    public float maxBoostedSpeed { get; private set; }
 
     private SparkController sparkController;
 
-    //public Vector3 RailInitialForward;
-    //Vector3 RailInitialRight;
     public Transform parentTransform { get; private set; } = null;
-    Rigidbody parentRigibody = null;
+    public Rigidbody parentRigibody = null;
     [SerializeField] private Camera mainCamera = null;
     [SerializeField] public GameObject cameraFree = null;
     private Vector3 camRelPosition = Vector3.zero;
     private Vector3 camRelRotation = Vector3.zero;
 
-    public int lapBoost { get; private set; } = 1;
+    public float lapBoost { get; private set; } = 1;
 
+    public float baseImpulse;
 
     public void SetLapBoost(int boost)
     {
-        lapBoost = boost;
+        lapBoost = boost * .1f;
     }
 
     public void ResetRotation()
@@ -85,7 +79,7 @@ public class TrolleyPlayerController : MonoBehaviour
 
     public void SetCameraPos(Transform pos)
     {
-    mainCamera.transform.SetParent(transform.parent);
+        mainCamera.transform.SetParent(transform.parent);
         mainCamera.transform.position = pos.position;
         mainCamera.transform.rotation = pos.rotation;
     }
@@ -121,6 +115,10 @@ public class TrolleyPlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (speed > maxSpeed)
+        {
+            speed -= .005f;
+        }
         switch (CurrentMovementState)
         {
             case TrolleyMovementState.Railed:
@@ -135,26 +133,15 @@ public class TrolleyPlayerController : MonoBehaviour
         }
     }
 
-
     Vector3 derailedVector;
     public float derailedDeceleration = 0.0003f;
 
 
-    public void Declerate()
+    public void Decelerate()
     {
-        if (!boosted)
+        if (speed > minSpeed)
         {
-            if (speed > minSpeed)
-            {
-                speed -= acceleration;
-            }
-        }
-        else
-        {
-            speed = Mathf.Clamp(speed - acceleration, minSpeed, maxBoostedSpeed);
-            maxBoostedSpeed = speed;
-            if (speed <= maxSpeed)
-                boosted = false;
+            speed -= acceleration;
         }
     }
 
@@ -170,7 +157,7 @@ public class TrolleyPlayerController : MonoBehaviour
         speed -= derailedDeceleration;
         if (speed < 0)
             speed = 0;
-        parentTransform.position += speed * DerailedSpeedMultiplier * lapBoost * tmsRailed.RailInitialForward;
+        parentTransform.position += (speed + lapBoost) * DerailedSpeedMultiplier * tmsRailed.RailInitialForward;
 
         // add vibrations to feel like you are vibrating
 
@@ -204,18 +191,15 @@ public class TrolleyPlayerController : MonoBehaviour
 
         if (Input.GetKey("up"))
         {
-            if (!boosted)
+            if (speed < maxSpeed)
             {
-                if (speed < maxSpeed)
-                {
-                    speed += acceleration;
-                }
+                speed += acceleration;
             }
         }
 
         if (Input.GetKey("down"))
         {
-            Declerate();
+            Decelerate();
         }
 
         if (Input.GetKey("right"))
@@ -233,7 +217,7 @@ public class TrolleyPlayerController : MonoBehaviour
 
         forward.y = 0f;
 
-        parentRigibody.velocity = (speed * freeSpeedMultiplier * lapBoost) * forward;
+        parentRigibody.velocity = ((speed + lapBoost) * freeSpeedMultiplier) * forward;
 
     }
 
@@ -241,9 +225,8 @@ public class TrolleyPlayerController : MonoBehaviour
 
     public void AddBoost(float morality)
     {
-        maxBoostedSpeed = .5f;
-        speed = .3f + morality * .06f;
-        boosted = true;
+        parentRigibody.AddForce(transform.forward * baseImpulse * morality);
+        speed = parentRigibody.velocity.magnitude / freeSpeedMultiplier;
     }
 
 }
