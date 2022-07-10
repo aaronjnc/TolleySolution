@@ -7,7 +7,7 @@ public class LapTracker : MonoBehaviour
 {
     [SerializeField]
     private readonly int MaxLaps = 3;
-    private int Lap = 0;
+    public int Lap { get; private set; } = 0;
     [SerializeField]
     private TextMeshProUGUI lapCounter;
     [SerializeField]
@@ -39,6 +39,7 @@ public class LapTracker : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Lap++;
+        tp.SetLapBoost(Lap);
         if (Lap > MaxLaps)
         {
             System.TimeSpan difference = System.DateTime.Now - startTime;

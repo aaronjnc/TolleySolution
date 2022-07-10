@@ -33,10 +33,6 @@ public class TrolleyMoveState_Railed : MonoBehaviour
 
     public void UpdateRailed()
     {
-
-        //mainCamera.transform.localPosition = railedCameraPosition;
-        //mainCamera.transform.localRotation = railedCameraRotation;
-
         ReadInputsRailed();
 
         if (tp.CurrentMovementState == TrolleyPlayerController.TrolleyMovementState.Free)
@@ -54,27 +50,28 @@ public class TrolleyMoveState_Railed : MonoBehaviour
                 transform.forward = Vector3.Slerp(RailInitialForward, -RailInitialRight, angle / -90f);
             }
         }
-
-        tp.parentTransform.position += tp.speed * RailInitialForward;
+        float tempLapBoost = tp.lapBoost;
+        if (tp.speed <= Mathf.Abs(tp.lapBoost))
+            tempLapBoost = 0;
+        tp.parentRigibody.velocity = (tp.speed + tempLapBoost) * RailedSpeedMultiplier * RailInitialForward;
     }
+
+    private float RailedSpeedMultiplier = 400;
 
 
     private void ReadInputsRailed()
     {
         if (Input.GetKey("up"))
         {
-            if (!tp.boosted)
+            if (tp.speed < tp.maxSpeed)
             {
-                if (tp.speed < tp.maxSpeed)
-                {
-                    tp.speed += tp.acceleration;
-                }
+                tp.speed += tp.acceleration;
             }
         }
 
         if (Input.GetKey("down"))
         {
-            tp.Declerate();
+            tp.Decelerate();
         }
 
         if (Input.GetKey("right"))
@@ -88,6 +85,7 @@ public class TrolleyMoveState_Railed : MonoBehaviour
                 // enterDerailment
                 tp.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Derailed);
                 tp.SetDerailedVector((angle > 0f) ? RailInitialRight : -RailInitialRight);
+                tp.SetSparks(true);
             }
 
         }
@@ -102,6 +100,7 @@ public class TrolleyMoveState_Railed : MonoBehaviour
                 // enterDerailment
                 tp.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Derailed);
                 tp.SetDerailedVector((angle > 0f) ? RailInitialRight : -RailInitialRight);
+                tp.SetSparks(false);
             }
         }
         else
@@ -165,10 +164,5 @@ public class TrolleyMoveState_Railed : MonoBehaviour
     public void SetRail(Rail rail)
     {
         currentRail = rail;
-    }
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
