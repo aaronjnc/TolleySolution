@@ -15,6 +15,7 @@ public class PersonSpawner : MonoBehaviour
     private Dictionary<int, List<PersonInfo>> people = new Dictionary<int, List<PersonInfo>>();
     [SerializeField]
     private Transform personParent;
+    private Dictionary<int, int> moralityVal = new Dictionary<int, int>();
     private void Awake()
     {
         _instance = this;
@@ -27,6 +28,7 @@ public class PersonSpawner : MonoBehaviour
             if (!people.ContainsKey(personInfo.GetMorality()))
             {
                 people.Add(personInfo.GetMorality(), new List<PersonInfo>());
+                moralityVal.Add(personInfo.GetMorality(), 5);
             }
             people[personInfo.GetMorality()].Add(personInfo);
         }
@@ -49,12 +51,21 @@ public class PersonSpawner : MonoBehaviour
             {
                 if (moralities.Contains(key))
                     continue;
-                float random = Random.Range(0f, 1f);
+                float random = moralityVal[morality] * Random.Range(0f, 1f);
                 if (random > highest)
+                {
                     morality = key;
+                    highest = random;
+                }
+                else if (highest == 0)
+                {
+                    morality = key;
+                }
+                moralityVal[morality] = Mathf.Clamp(moralityVal[morality] + 1, 0, 5);
             }
             highest = 0;
             moralities.Add(morality);
+            moralityVal[morality] = 0;
             GameObject current = null;
             foreach (PersonInfo person in people[morality])
             {
@@ -66,13 +77,9 @@ public class PersonSpawner : MonoBehaviour
                     current = person.gameObject;
                     highest = random;
                 }
-                else if (random == highest)
+                else if (highest == 0)
                 {
-                    random = Random.Range(0f, 1f);
-                    if (random > highest)
-                    {
-                        current = person.gameObject;
-                    }
+                    current = person.gameObject;
                 }
             }
             chosen.Add(current);
