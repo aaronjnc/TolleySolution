@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e938bd79d2d66a04384721bb7d606118, type: 2}
+  - {fileID: 2100000, guid: 0a229e594cc6a004d9dc1f1bcae61e8b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a088ade9bd808640a728eafb954d924, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  personName: Mom with Stroller
+  personName: Mom & Baby
   morality: 5
 --- !u!65 &4686842247327496197
 BoxCollider:

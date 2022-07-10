@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e938bd79d2d66a04384721bb7d606118, type: 2}
+  - {fileID: 2100000, guid: 87b13f50191b7f949a6b1412c4d130d9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   personName: Cat
-  morality: 4
+  morality: 3
 --- !u!65 &5543584370202363237
 BoxCollider:
   m_ObjectHideFlags: 0

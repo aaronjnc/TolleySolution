@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PersonInfo : MonoBehaviour {
+public class PersonInfo : MonoBehaviour 
+{
     [SerializeField]
     private string personName = "";
     [SerializeField]
@@ -10,7 +11,7 @@ public class PersonInfo : MonoBehaviour {
     private bool alive = false;
     private bool original = true;
     private SpawnPoint spawnPoint;
-    private int weight = 3;
+    private int weight = 5;
     private float XRot;
     private void Start()
     {
@@ -53,6 +54,7 @@ public class PersonInfo : MonoBehaviour {
     }
     public void Kill()
     {
+        BloodManager.Instance.GetBlood(transform.position);
         if (original)
         {
             gameObject.SetActive(false);
@@ -76,7 +78,7 @@ public class PersonInfo : MonoBehaviour {
     public int GetWeight()
     {
         int weight = this.weight;
-        this.weight = Mathf.Clamp(this.weight++, 0, 3);
+        this.weight = Mathf.Clamp(this.weight + 1, 0, 5);
         return weight;
     }
 
