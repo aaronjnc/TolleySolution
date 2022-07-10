@@ -31,6 +31,7 @@ public class LapTracker : MonoBehaviour
     private TextMeshProUGUI lapTime;
     [SerializeField]
     private GameObject clearScores;
+    private TimeSpan finalTime;
     // Start is called before the first frame update
     void Awake()
     {
@@ -59,7 +60,8 @@ public class LapTracker : MonoBehaviour
         tp.SetLapBoost(Lap);
         if (Lap > MaxLaps)
         {
-            DisplayScores();
+            finalTime = DateTime.Now - startTime;
+            DisplayScores(finalTime);
             restartButton.SetActive(true);
             quitButton.SetActive(true);
             tp.enabled = false;
@@ -78,11 +80,10 @@ public class LapTracker : MonoBehaviour
                 string.Format("{00:00}", difference.Milliseconds);
     }
 
-    private void DisplayScores()
+    private void DisplayScores(TimeSpan time)
     {
-        TimeSpan difference = DateTime.Now - startTime;
-        lapTime.text = "Time: " + TimeString(difference);
-        int spot = highScoreScript.AddTime(difference);
+        lapTime.text = "Time: " + TimeString(time);
+        int spot = highScoreScript.AddTime(time);
         TimeSpan[] times = highScoreScript.GetTimes();
         for (int i = 0; i < times.Length && i < highScores.Length; i++)
         {
@@ -110,6 +111,6 @@ public class LapTracker : MonoBehaviour
             File.Delete(path);
         }
         highScoreScript = new HighScores();
-        DisplayScores();
+        DisplayScores(finalTime);
     }
 }
