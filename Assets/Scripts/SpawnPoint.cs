@@ -7,6 +7,13 @@ public class SpawnPoint : MonoBehaviour
     private Choice choice;
     private bool occupied = false;
     private GameObject person;
+    private AudioSource splat;
+
+    private void Start()
+    {
+        splat = GetComponentInParent<AudioSource>();
+    }
+
     public void SetChoice(Choice choice)
     {
         this.choice = choice;
@@ -16,6 +23,7 @@ public class SpawnPoint : MonoBehaviour
     {
         person.GetComponent<PersonInfo>().Kill();
         occupied = false;
+        splat.Play();
         choice.DisablePeople();
     }
 

@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PersonInfo : MonoBehaviour {
+public class PersonInfo : MonoBehaviour 
+{
     [SerializeField]
     private string personName = "";
     [SerializeField]
