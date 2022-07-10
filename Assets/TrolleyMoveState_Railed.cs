@@ -15,6 +15,7 @@ public class TrolleyMoveState_Railed : MonoBehaviour
     TrolleyPlayerController tp = null;
     public Vector3 RailInitialForward;
     Vector3 RailInitialRight;
+    Vector3 cameraLocalposition;
     float angle = 0f;
 
     float angleSpeed = 1f;
@@ -27,6 +28,8 @@ public class TrolleyMoveState_Railed : MonoBehaviour
     {
         RailInitialForward = forward;
         RailInitialRight = Vector3.Cross(Vector3.up, RailInitialForward);
+        cameraLocalposition = tp.mainCamera.transform.localPosition;
+
     }
 
 
@@ -53,12 +56,18 @@ public class TrolleyMoveState_Railed : MonoBehaviour
         float tempLapBoost = tp.lapBoost;
         if (tp.speed <= Mathf.Abs(tp.lapBoost))
             tempLapBoost = 0;
-        if (Time.time > tp.boostTime + tp.boostDuration)
+        if (tp.boostTime > 0f && Time.time > tp.boostTime + tp.boostDuration)
         {
             tp.boostMultiplier = 1f;
+            tp.boostTime = -1f;
+            tp.mainCamera.transform.position = tp.mainCamera.transform.position + RailInitialForward;
         }
+
+        
         tp.parentRigibody.velocity = (tp.speed + tempLapBoost) * tp.boostMultiplier * RailedSpeedMultiplier * RailInitialForward;
     }
+
+
 
     private float RailedSpeedMultiplier = 400;
 
