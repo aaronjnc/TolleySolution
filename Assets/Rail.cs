@@ -71,7 +71,10 @@ public class Rail : MonoBehaviour
     public void DisplayChoices()
     {
         if (currentChoice >= choices.Length)
+        {
+            DisableChoiceImages();
             return;
+        }
         choices[currentChoice].FillImages(images);
         currentChoice++;
     }
@@ -90,15 +93,21 @@ public class Rail : MonoBehaviour
         playerController.gameObject.transform.position = newPos;
     }
 
-    public void StopRail()
+    public void DisableChoiceImages()
     {
         images[currentLane].LeaveLane();
         for (int i = 0; i < images.Length; i++)
         {
             images[i].gameObject.SetActive(false);
         }
+    }
+
+    public void StopRail()
+    {
+        DisableChoiceImages();
         playerController.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Free);
         playerController.ResetCamera();
+        currentChoice = 0;
     }
 
     private void OnTriggerEnter(Collider other)

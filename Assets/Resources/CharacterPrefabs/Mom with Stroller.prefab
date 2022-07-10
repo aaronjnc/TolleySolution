@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a088ade9bd808640a728eafb954d924, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  personName: Mom with Stroller
+  personName: Mom & Baby
   morality: 5
 --- !u!65 &4686842247327496197
 BoxCollider:

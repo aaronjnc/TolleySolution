@@ -40,6 +40,8 @@ public class TrolleyPlayerController : MonoBehaviour
 
     private bool turningRight = true;
 
+    private int rotateDir = 1;
+
     public void SetLapBoost(int boost)
     {
         lapBoost = boost * .1f - .2f;
@@ -167,13 +169,16 @@ public class TrolleyPlayerController : MonoBehaviour
         parentRigibody.velocity = (speed + tempLapBoost) * DerailedSpeedMultiplier * tmsRailed.RailInitialForward;
 
         // add vibrations to feel like you are vibrating
-
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x,
+            transform.eulerAngles.y, transform.eulerAngles.z + rotateDir);
+        rotateDir *= -1;
         // add sparks
 
         if (Input.GetKeyDown("space"))
         {
             SetMovementState(TrolleyMovementState.Railed);
             DisableSparks();
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         }
 
 
