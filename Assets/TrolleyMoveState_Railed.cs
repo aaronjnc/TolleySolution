@@ -33,10 +33,6 @@ public class TrolleyMoveState_Railed : MonoBehaviour
 
     public void UpdateRailed()
     {
-
-        //mainCamera.transform.localPosition = railedCameraPosition;
-        //mainCamera.transform.localRotation = railedCameraRotation;
-
         ReadInputsRailed();
 
         if (tp.CurrentMovementState == TrolleyPlayerController.TrolleyMovementState.Free)
@@ -55,28 +51,25 @@ public class TrolleyMoveState_Railed : MonoBehaviour
             }
         }
 
-        tp.parentTransform.position += tp.speed * RailedSpeedMultiplier * tp.lapBoost * RailInitialForward;
+        tp.parentRigibody.velocity = (tp.speed + tp.lapBoost) * RailedSpeedMultiplier * RailInitialForward;
     }
 
-    private float RailedSpeedMultiplier = 5;
+    private float RailedSpeedMultiplier = 400;
 
 
     private void ReadInputsRailed()
     {
         if (Input.GetKey("up"))
         {
-            if (!tp.boosted)
+            if (tp.speed < tp.maxSpeed)
             {
-                if (tp.speed < tp.maxSpeed)
-                {
-                    tp.speed += tp.acceleration;
-                }
+                tp.speed += tp.acceleration;
             }
         }
 
         if (Input.GetKey("down"))
         {
-            tp.Declerate();
+            tp.Decelerate();
         }
 
         if (Input.GetKey("right"))
