@@ -163,9 +163,4 @@ public class TrolleyMoveState_Railed : MonoBehaviour
     {
         currentRail = rail;
     }
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }
