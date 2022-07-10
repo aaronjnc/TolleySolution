@@ -9,8 +9,11 @@ public class Choice : MonoBehaviour
     private SpawnPoint[] spawnPoints;
     [SerializeField]
     private float WaitTime = 3f;
+    private ChoiceUI[] images;
+    private Rail rail;
     private void Start()
     {
+        rail = GetComponentInParent<Rail>();
         for (int i = 0; i < spawnPoints.Length; i++)
         {
             spawnPoints[i].SetChoice(this);
@@ -29,6 +32,7 @@ public class Choice : MonoBehaviour
 
     public void DisablePeople()
     {
+        rail.DisplayChoices();
         StartCoroutine("WaitToSpawn");
     }
 

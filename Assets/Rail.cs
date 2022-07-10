@@ -46,6 +46,7 @@ public class Rail : MonoBehaviour
             else
                 images[i].gameObject.SetActive(false);
         }
+        DisplayChoices();
         playerController.SetInitialForward(transform.forward);
         playerController.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Railed);
         playerController.SetCameraPos(cameraPos);
@@ -62,13 +63,17 @@ public class Rail : MonoBehaviour
             }
         }
         currentLane = lanePos;
+        images[currentLane].EnterLane();
         Vector3 newPos = new Vector3(Lanes[lanePos].position.x, trolleyPos.y, Lanes[lanePos].position.z);
         playerController.gameObject.transform.position = newPos;
     }
 
     public void DisplayChoices()
     {
+        if (currentChoice >= choices.Length)
+            return;
         choices[currentChoice].FillImages(images);
+        currentChoice++;
     }
 
     public void SwitchLane(int i)
@@ -87,6 +92,11 @@ public class Rail : MonoBehaviour
 
     public void StopRail()
     {
+        images[currentLane].LeaveLane();
+        for (int i = 0; i < images.Length; i++)
+        {
+            images[i].gameObject.SetActive(false);
+        }
         playerController.SetMovementState(TrolleyPlayerController.TrolleyMovementState.Free);
         playerController.ResetCamera();
     }

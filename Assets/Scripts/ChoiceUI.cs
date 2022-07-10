@@ -6,7 +6,9 @@ using TMPro;
 
 public class ChoiceUI : MonoBehaviour
 {
+    [SerializeField]
     private RawImage rawImage;
+    [SerializeField]
     private TextMeshProUGUI choiceName;
     public void SetUp(Texture img, string choice)
     {
