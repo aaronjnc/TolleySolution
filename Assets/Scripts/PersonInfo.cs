@@ -22,7 +22,10 @@ public class PersonInfo : MonoBehaviour {
         if (!alive)
         {
             this.spawnPoint = spawnPoint;
-            transform.position = spawnPoint.transform.position;
+            Vector3 spawnPos = new Vector3(spawnPoint.transform.position.x, 
+                spawnPoint.transform.position.y + 8,
+                spawnPoint.transform.position.z);
+            transform.position = spawnPos;
             alive = true;
             gameObject.SetActive(true);
             return gameObject;
