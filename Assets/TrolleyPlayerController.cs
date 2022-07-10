@@ -53,6 +53,7 @@ using UnityEngine;
                 parentRigibody.velocity = Vector3.zero;
                 break;
             case TrolleyMovementState.Free:
+                DisableSparks();
                 break;
         }
     }
@@ -161,7 +162,7 @@ using UnityEngine;
         speed -= derailedDeceleration;
         if (speed < 0)
             speed = 0;
-        parentTransform.position += speed * tmsRailed.RailInitialForward;
+        parentTransform.position += speed * DerailedSpeedMultiplier * tmsRailed.RailInitialForward;
 
         // add vibrations to feel like you are vibrating
 
@@ -170,12 +171,19 @@ using UnityEngine;
         if (Input.GetKeyDown("space"))
         {
             SetMovementState(TrolleyMovementState.Railed);
-            SetSparks(true, false);
-            SetSparks(false, false);
+            DisableSparks();
         }
 
 
     }
+
+    private void DisableSparks()
+    {
+        SetSparks(true, false);
+        SetSparks(false, false);
+    }
+
+    private float DerailedSpeedMultiplier = 5;
 
     void UpdateFree()
     {
