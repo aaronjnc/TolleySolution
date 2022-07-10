@@ -112,7 +112,7 @@ using UnityEngine;
 
 
     Vector3 derailedVector;
-    float derailedDeceleration = 0.003f;
+    public float derailedDeceleration = 0.0003f;
 
 
     public void Declerate()
@@ -199,9 +199,11 @@ using UnityEngine;
 
         forward.y = 0f;
 
-        parentRigibody.velocity = (speed * 200) * forward;
+        parentRigibody.velocity = (speed * freeSpeedMultiplier) * forward;
 
     }
+
+    public float freeSpeedMultiplier = 400f;
 
     public void AddBoost(float morality)
     {
