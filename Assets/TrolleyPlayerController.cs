@@ -281,7 +281,12 @@ public class TrolleyPlayerController : MonoBehaviour
         float tempLapBoost = lapBoost;
         if (speed <= Mathf.Abs(lapBoost))
             tempLapBoost = 0;
-        parentRigibody.velocity = ((speed + tempLapBoost) * freeSpeedMultiplier) * forward;
+
+        if (Time.time > boostTime + boostDuration)
+        {
+            boostMultiplier = 1f;
+        }
+        parentRigibody.velocity = ((speed + tempLapBoost) * freeSpeedMultiplier) * boostMultiplier * forward;
 
     }
 
@@ -289,9 +294,17 @@ public class TrolleyPlayerController : MonoBehaviour
 
     public void AddBoost(float morality)
     {
-        parentRigibody.AddForce(transform.forward * baseImpulse * morality);
-        speed = parentRigibody.velocity.magnitude / freeSpeedMultiplier;
+        boostTime = Time.time;
+        boostDuration = morality / 2f;
+        boostMultiplier = 2f;
+        //parentRigibody.AddForce(transform.forward * baseImpulse * morality);
+        //speed = parentRigibody.velocity.magnitude / freeSpeedMultiplier;
     }
+
+    public float boostDuration;  
+    public float boostMultiplier = 2f;
+    public float boostTime = 0f;
+
 
     public void SetTurning(bool right)
     {

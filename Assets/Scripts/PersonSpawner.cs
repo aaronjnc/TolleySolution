@@ -16,6 +16,9 @@ public class PersonSpawner : MonoBehaviour
     [SerializeField]
     private Transform personParent;
     private Dictionary<int, int> moralityVal = new Dictionary<int, int>();
+
+    public float PictureScale = 2f;
+
     private void Awake()
     {
         _instance = this;
@@ -23,6 +26,7 @@ public class PersonSpawner : MonoBehaviour
         foreach (Object obj in peopleObjects)
         {
             GameObject person = SpawnNew(obj);
+            person.transform.localScale *= PictureScale;
             person.SetActive(false);
             PersonInfo personInfo = person.GetComponent<PersonInfo>();
             if (!people.ContainsKey(personInfo.GetMorality()))

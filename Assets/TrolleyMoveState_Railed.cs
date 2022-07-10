@@ -53,7 +53,11 @@ public class TrolleyMoveState_Railed : MonoBehaviour
         float tempLapBoost = tp.lapBoost;
         if (tp.speed <= Mathf.Abs(tp.lapBoost))
             tempLapBoost = 0;
-        tp.parentRigibody.velocity = (tp.speed + tempLapBoost) * RailedSpeedMultiplier * RailInitialForward;
+        if (Time.time > tp.boostTime + tp.boostDuration)
+        {
+            tp.boostMultiplier = 1f;
+        }
+        tp.parentRigibody.velocity = (tp.speed + tempLapBoost) * tp.boostMultiplier * RailedSpeedMultiplier * RailInitialForward;
     }
 
     private float RailedSpeedMultiplier = 400;
