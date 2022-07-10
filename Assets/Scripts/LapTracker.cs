@@ -86,7 +86,7 @@ public class LapTracker : MonoBehaviour
         TimeSpan[] times = highScoreScript.GetTimes();
         for (int i = 0; i < times.Length && i < highScores.Length; i++)
         {
-            highScores[i].text = TimeString(times[i]);
+            highScores[i].text = (i + 1) + ": " + TimeString(times[i]);
             if (i == spot)
             {
                 highScores[i].color = Color.red;

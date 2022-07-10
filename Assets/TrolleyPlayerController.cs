@@ -99,11 +99,14 @@ public class TrolleyPlayerController : MonoBehaviour
         ResetRotation();
     }
 
+    private AudioSource music;
 
     [SerializeField] private TrolleyMoveState_Railed tmsRailed;
     // Start is called before the first frame update
     void Start()
     {
+        music = GetComponent<AudioSource>();
+        music.Play();
         SetInitialForward(transform.forward);
         freeForward = transform.forward;
 

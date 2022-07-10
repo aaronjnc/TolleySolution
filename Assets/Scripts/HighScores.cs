@@ -71,7 +71,7 @@ public class HighScores
         string[] lines = new string[topTimes.Length];
         for (int i = 0; i < topTimes.Length; i++)
         {
-            lines[i] = (i + 1) + ": " + TimeSpanString(topTimes[i]);
+            lines[i] = TimeSpanString(topTimes[i]);
         }
         return lines;
     }
