@@ -37,7 +37,7 @@ public class TrolleyPlayerController : MonoBehaviour
 
     public void SetLapBoost(int boost)
     {
-        lapBoost = boost * .1f;
+        lapBoost = boost * .1f - .2f;
     }
 
     public void ResetRotation()
