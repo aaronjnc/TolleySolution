@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7265725519811371554}
   - component: {fileID: 4964620547486904897}
   m_Layer: 0
-  m_Name: Happy Couple
+  m_Name: Couple
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e938bd79d2d66a04384721bb7d606118, type: 2}
+  - {fileID: 2100000, guid: 51865c2eca60a904c9beff533e244f62, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a088ade9bd808640a728eafb954d924, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  personName: Happy Couple
+  personName: Couple
   morality: 4
 --- !u!65 &7265725519811371554
 BoxCollider:

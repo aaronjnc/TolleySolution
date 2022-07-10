@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   personName: Cat
-  morality: 4
+  morality: 3
 --- !u!65 &5543584370202363237
 BoxCollider:
   m_ObjectHideFlags: 0
