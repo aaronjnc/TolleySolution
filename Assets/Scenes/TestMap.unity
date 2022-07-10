@@ -12247,6 +12247,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6338079259477214598, guid: 172ea0e9cc5154620a7b2ba886030098, type: 3}
+      propertyPath: m_Drag
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6338079259477214598, guid: 172ea0e9cc5154620a7b2ba886030098, type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6338079259477214598, guid: 172ea0e9cc5154620a7b2ba886030098, type: 3}
       propertyPath: m_Constraints
       value: 116
       objectReference: {fileID: 0}
@@ -12297,6 +12305,10 @@ PrefabInstance:
     - target: {fileID: 7137425009707802231, guid: 172ea0e9cc5154620a7b2ba886030098, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7137425009896139777, guid: 172ea0e9cc5154620a7b2ba886030098, type: 3}
+      propertyPath: baseImpulse
+      value: 0.0001
       objectReference: {fileID: 0}
     - target: {fileID: 7137425011515870376, guid: 172ea0e9cc5154620a7b2ba886030098, type: 3}
       propertyPath: m_LocalScale.x
