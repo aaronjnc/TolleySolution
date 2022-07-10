@@ -157,7 +157,7 @@ public class TrolleyPlayerController : MonoBehaviour
         speed -= derailedDeceleration;
         if (speed < 0)
             speed = 0;
-        parentTransform.position += (speed + lapBoost) * DerailedSpeedMultiplier * tmsRailed.RailInitialForward;
+        parentRigibody.velocity = (speed + lapBoost) * DerailedSpeedMultiplier * tmsRailed.RailInitialForward;
 
         // add vibrations to feel like you are vibrating
 
@@ -178,7 +178,7 @@ public class TrolleyPlayerController : MonoBehaviour
         SetSparks(false, false);
     }
 
-    private float DerailedSpeedMultiplier = 5;
+    private float DerailedSpeedMultiplier = 200;
 
     void UpdateFree()
     {
