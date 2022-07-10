@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5900,7 +5900,7 @@ Transform:
   - {fileID: 2133491369}
   - {fileID: 1356312398}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &472114721
 MonoBehaviour:
@@ -7316,7 +7316,7 @@ Transform:
   - {fileID: 394157368}
   - {fileID: 1612897522}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &600177632
 BoxCollider:
@@ -9721,7 +9721,7 @@ Transform:
   - {fileID: 1823783994}
   - {fileID: 2136398335}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &761698553
 MonoBehaviour:
@@ -14765,7 +14765,7 @@ Transform:
   - {fileID: 981889043}
   - {fileID: 1582302787}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &1088046264
 MonoBehaviour:
@@ -19284,7 +19284,7 @@ Transform:
   - {fileID: 763156005}
   - {fileID: 1544266925}
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
 --- !u!114 &1359490687
 MonoBehaviour:
@@ -20315,7 +20315,7 @@ Transform:
   - {fileID: 1460300710}
   - {fileID: 1635528961}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!65 &1427479108
 BoxCollider:
@@ -25012,6 +25012,63 @@ Transform:
   m_Father: {fileID: 885119175}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1725724612
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2525171887640242536, guid: 60fb1e75111a144cebcb7cf7a10bdde9, type: 3}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525171887640242536, guid: 60fb1e75111a144cebcb7cf7a10bdde9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -44.187805
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525171887640242536, guid: 60fb1e75111a144cebcb7cf7a10bdde9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -300
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525171887640242536, guid: 60fb1e75111a144cebcb7cf7a10bdde9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 466.28006
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525171887640242536, guid: 60fb1e75111a144cebcb7cf7a10bdde9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525171887640242536, guid: 60fb1e75111a144cebcb7cf7a10bdde9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525171887640242536, guid: 60fb1e75111a144cebcb7cf7a10bdde9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525171887640242536, guid: 60fb1e75111a144cebcb7cf7a10bdde9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525171887640242536, guid: 60fb1e75111a144cebcb7cf7a10bdde9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525171887640242536, guid: 60fb1e75111a144cebcb7cf7a10bdde9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525171887640242536, guid: 60fb1e75111a144cebcb7cf7a10bdde9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525171887640242542, guid: 60fb1e75111a144cebcb7cf7a10bdde9, type: 3}
+      propertyPath: m_Name
+      value: BloodManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 60fb1e75111a144cebcb7cf7a10bdde9, type: 3}
 --- !u!1 &1728259540
 GameObject:
   m_ObjectHideFlags: 0
