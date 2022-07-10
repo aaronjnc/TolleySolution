@@ -35,4 +35,9 @@ public class SpawnPoint : MonoBehaviour
         this.person = person.GetComponent<PersonInfo>().SetLocation(this);
         occupied = true;
     }
+
+    public PersonInfo GetPersonInfo()
+    {
+        return person.GetComponent<PersonInfo>();
+    }
 }
