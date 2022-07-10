@@ -22,7 +22,7 @@ using UnityEngine;
 
     public float speed = 0.000f;
     public float acceleration { get; private set; } = 0.001f;
-    public float maxSpeed { get; private set; } = 0.3f;
+    public float maxSpeed { get; private set; } = 0.6f;
     public float minSpeed { get; private set; } = -0.3f;
     public bool boosted { get; private set; }  = false;
     public float maxBoostedSpeed { get; private set; }
