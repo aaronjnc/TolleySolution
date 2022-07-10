@@ -9,7 +9,7 @@ using System;
 public class LapTracker : MonoBehaviour
 {
     [SerializeField]
-    private readonly int MaxLaps = 1;
+    private int MaxLaps = 3;
     public int Lap { get; private set; } = 0;
     [SerializeField]
     private TextMeshProUGUI lapCounter;
@@ -81,7 +81,7 @@ public class LapTracker : MonoBehaviour
     private void DisplayScores()
     {
         TimeSpan difference = DateTime.Now - startTime;
-        lapTime.text = TimeString(difference);
+        lapTime.text = "Time: " + TimeString(difference);
         int spot = highScoreScript.AddTime(difference);
         TimeSpan[] times = highScoreScript.GetTimes();
         for (int i = 0; i < times.Length && i < highScores.Length; i++)
