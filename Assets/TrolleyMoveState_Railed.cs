@@ -50,8 +50,10 @@ public class TrolleyMoveState_Railed : MonoBehaviour
                 transform.forward = Vector3.Slerp(RailInitialForward, -RailInitialRight, angle / -90f);
             }
         }
-
-        tp.parentRigibody.velocity = (tp.speed + tp.lapBoost) * RailedSpeedMultiplier * RailInitialForward;
+        float tempLapBoost = tp.lapBoost;
+        if (tp.speed <= Mathf.Abs(tp.lapBoost))
+            tempLapBoost = 0;
+        tp.parentRigibody.velocity = (tp.speed + tempLapBoost) * RailedSpeedMultiplier * RailInitialForward;
     }
 
     private float RailedSpeedMultiplier = 400;
@@ -162,10 +164,5 @@ public class TrolleyMoveState_Railed : MonoBehaviour
     public void SetRail(Rail rail)
     {
         currentRail = rail;
-    }
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
