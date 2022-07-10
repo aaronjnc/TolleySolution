@@ -15,6 +15,10 @@ public class LapTracker : MonoBehaviour
     [SerializeField]
     private TrolleyPlayerController tp;
     private System.DateTime startTime;
+    [SerializeField]
+    private GameObject restartButton;
+    [SerializeField]
+    private GameObject quitButton;
     // Start is called before the first frame update
     void Awake()
     {
@@ -47,7 +51,10 @@ public class LapTracker : MonoBehaviour
                 string.Format("{00:00}", difference.Seconds) + ":" +
                 string.Format("{00:00}", difference.Milliseconds);
             countdownTimer.gameObject.SetActive(true);
+            restartButton.SetActive(true);
+            quitButton.SetActive(true);
             tp.enabled = false;
+            Time.timeScale = 0;
         }
         else
         {
