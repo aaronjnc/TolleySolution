@@ -30,10 +30,15 @@ public class TrolleyPlayerController : MonoBehaviour
     [SerializeField] public GameObject cameraFree = null;
     private Vector3 camRelPosition = Vector3.zero;
     private Vector3 camRelRotation = Vector3.zero;
+    private Vector3 freeForward = Vector3.zero;
 
     public float lapBoost { get; private set; } = 1;
 
     public float baseImpulse;
+
+    private bool turning = false;
+
+    private bool turningRight = true;
 
     public void SetLapBoost(int boost)
     {
@@ -98,8 +103,7 @@ public class TrolleyPlayerController : MonoBehaviour
     void Start()
     {
         SetInitialForward(transform.forward);
-
-
+        freeForward = transform.forward;
 
         parentTransform = transform.parent;
         parentRigibody = parentTransform.GetComponent<Rigidbody>();
@@ -157,7 +161,10 @@ public class TrolleyPlayerController : MonoBehaviour
         speed -= derailedDeceleration;
         if (speed < 0)
             speed = 0;
-        parentRigibody.velocity = (speed + lapBoost) * DerailedSpeedMultiplier * tmsRailed.RailInitialForward;
+        float tempLapBoost = lapBoost;
+        if (speed <= Mathf.Abs(lapBoost))
+            tempLapBoost = 0;
+        parentRigibody.velocity = (speed + tempLapBoost) * DerailedSpeedMultiplier * tmsRailed.RailInitialForward;
 
         // add vibrations to feel like you are vibrating
 
@@ -205,19 +212,76 @@ public class TrolleyPlayerController : MonoBehaviour
         if (Input.GetKey("right"))
         {
             parentTransform.RotateAround(transform.position, Vector3.up, 1f);
-
+            float angle = Vector3.SignedAngle(freeForward, transform.forward, Vector3.up);
+            if (!turning && Mathf.Abs(angle) >= 45)
+            {
+                int dir = 0;
+                if (angle <= -45)
+                    dir = 1;
+                else
+                    dir = -1;
+                parentTransform.RotateAround(transform.position, Vector3.up, dir);
+            }
         }
         else if (Input.GetKey("left"))
         {
             parentTransform.RotateAround(transform.position, Vector3.up, -1f);
+            float angle = Vector3.SignedAngle(freeForward, transform.forward, Vector3.up);
+            if (!turning && Mathf.Abs(angle) >= 45)
+            {
+                int dir = 0;
+                if (angle <= -45)
+                    dir = 1;
+                else
+                    dir = -1;
+                parentTransform.RotateAround(transform.position, Vector3.up, dir);
+            }
         }
-
+        else if (!turning)
+        {
+            int dir = 0;
+            float angle = Vector3.SignedAngle(freeForward, transform.forward, Vector3.up);
+            if (transform.forward != freeForward)
+            {
+                if (angle < .5f && angle > -.5f)
+                    transform.forward = freeForward;
+                else
+                {
+                    if (angle < 0)
+                        dir = 1;
+                    else
+                        dir = -1;
+                    parentTransform.RotateAround(transform.position, Vector3.up, dir * .25f);
+                }
+            }
+        }
+        if (turning)
+        {
+            float angle = Vector3.SignedAngle(freeForward, transform.forward, Vector3.up);
+            float minAngle = 0;
+            float maxAngle = 0;
+            if (turningRight)
+                maxAngle = 90;
+            else
+                minAngle = -90;
+            if (angle > maxAngle || angle < minAngle)
+            {
+                int dir = 0;
+                if (angle < minAngle)
+                    dir = 1;
+                else
+                    dir = -1;
+                parentTransform.RotateAround(transform.position, Vector3.up, dir);
+            }
+        }
         Vector3 forward = parentTransform.forward;
 
 
         forward.y = 0f;
-
-        parentRigibody.velocity = ((speed + lapBoost) * freeSpeedMultiplier) * forward;
+        float tempLapBoost = lapBoost;
+        if (speed <= Mathf.Abs(lapBoost))
+            tempLapBoost = 0;
+        parentRigibody.velocity = ((speed + tempLapBoost) * freeSpeedMultiplier) * forward;
 
     }
 
@@ -229,4 +293,15 @@ public class TrolleyPlayerController : MonoBehaviour
         speed = parentRigibody.velocity.magnitude / freeSpeedMultiplier;
     }
 
+    public void SetTurning(bool right)
+    {
+        turning = true;
+        turningRight = right;
+    }
+
+    public void StopTurning(Vector3 newForward)
+    {
+        turning = false;
+        freeForward = newForward;
+    }
 }
