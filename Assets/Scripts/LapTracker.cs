@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System;
 
 public class LapTracker : MonoBehaviour
 {
     [SerializeField]
-    private readonly int MaxLaps = 3;
+    private readonly int MaxLaps = 1;
     public int Lap { get; private set; } = 0;
     [SerializeField]
     private TextMeshProUGUI lapCounter;
@@ -19,9 +22,19 @@ public class LapTracker : MonoBehaviour
     private GameObject restartButton;
     [SerializeField]
     private GameObject quitButton;
+    [SerializeField]
+    private GameObject highscoreList;
+    [SerializeField]
+    private TextMeshProUGUI[] highScores;
+    private HighScores highScoreScript;
+    [SerializeField]
+    private TextMeshProUGUI lapTime;
+    [SerializeField]
+    private GameObject clearScores;
     // Start is called before the first frame update
     void Awake()
     {
+        highScoreScript = new HighScores();
         tp.enabled = false;
         StartCoroutine("StartTimer");
     }
@@ -35,7 +48,7 @@ public class LapTracker : MonoBehaviour
         yield return new WaitForSeconds(1);
         countdownTimer.text = "Go!";
         tp.enabled = true;
-        startTime = System.DateTime.Now;
+        startTime = DateTime.Now;
         yield return new WaitForSeconds(.5f);
         countdownTimer.gameObject.SetActive(false);
     }
@@ -46,11 +59,7 @@ public class LapTracker : MonoBehaviour
         tp.SetLapBoost(Lap);
         if (Lap > MaxLaps)
         {
-            System.TimeSpan difference = System.DateTime.Now - startTime;
-            countdownTimer.text = string.Format("{00:00}", difference.Minutes) + ":" +
-                string.Format("{00:00}", difference.Seconds) + ":" +
-                string.Format("{00:00}", difference.Milliseconds);
-            countdownTimer.gameObject.SetActive(true);
+            DisplayScores();
             restartButton.SetActive(true);
             quitButton.SetActive(true);
             tp.enabled = false;
@@ -60,5 +69,47 @@ public class LapTracker : MonoBehaviour
         {
             lapCounter.text = "Lap: " + Lap + "/" + MaxLaps;
         }
+    }
+
+    private string TimeString(TimeSpan difference)
+    {
+        return string.Format("{00:00}", difference.Minutes) + ":" +
+                string.Format("{00:00}", difference.Seconds) + ":" +
+                string.Format("{00:00}", difference.Milliseconds);
+    }
+
+    private void DisplayScores()
+    {
+        TimeSpan difference = DateTime.Now - startTime;
+        lapTime.text = TimeString(difference);
+        int spot = highScoreScript.AddTime(difference);
+        TimeSpan[] times = highScoreScript.GetTimes();
+        for (int i = 0; i < times.Length && i < highScores.Length; i++)
+        {
+            highScores[i].text = TimeString(times[i]);
+            if (i == spot)
+            {
+                highScores[i].color = Color.red;
+            }
+            else
+            {
+                highScores[i].color = Color.black;
+            }
+        }
+        lapTime.gameObject.SetActive(true);
+        highscoreList.SetActive(true);
+        clearScores.SetActive(true);
+        highScoreScript.SaveTimes();
+    }
+
+    public void ResetHighScores()
+    {
+        string path = Path.Combine(Application.persistentDataPath, "highScores.txt");
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+        highScoreScript = new HighScores();
+        DisplayScores();
     }
 }
